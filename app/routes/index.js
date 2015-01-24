@@ -12,6 +12,8 @@ export default Ember.Route.extend({
           this.controllerFor('application').set('ghToken', authData.github.accessToken);
           console.log("Authenticated successfully with payload:", authData);
           this.controllerFor('application').gh('users/' + username).then((user) =>{
+            user.id = user.login;
+            this.store.createRecord('user', user);
             this.controllerFor('navbar').set('user', user);
             this.send('gatherStarred');
           });
@@ -24,9 +26,11 @@ export default Ember.Route.extend({
       var library = this.controllerFor('index').get('library')
       this.controllerFor('application').gh('users/' + username + '/starred').then((stars) =>{
         stars.forEach((star) =>{
+          star.id = star.full_name;
+          star.user = this.store.find('user', username);
+          this.store.createRecord('card', star);
           library.pushObject(Card.create(star))
         });
-        console.log(library)
       })
     },
   },
