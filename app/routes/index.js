@@ -14,9 +14,10 @@ export default Ember.Route.extend({
           console.log("Authenticated successfully with payload:", authData);
           this.controllerFor('application').gh('users/' + username).then((user) =>{
             user.id = user.login;
-            this.store.createRecord('user', user);
-            this.controllerFor('navbar').set('user', user);
-            this.send('gatherStarred');
+            this.store.createRecord('user', user).save().then(() => {
+              this.controllerFor('navbar').set('user', user);
+              this.send('gatherStarred');
+            });
           });
         }
       });
@@ -78,11 +79,11 @@ export default Ember.Route.extend({
             otherGame.set('opponent', username)
             return otherGame.save()
           }).then(() => {
-            return g
+            return this.store.find('user', opponent)
           })
         })
-      }).then((g)=> {
-        this.controllerFor('game').set('game', g)
+      }).then((opponent)=> {
+        this.controllerFor('game').set('opponent', opponent)
         this.transitionTo('game')
       })
       .catch((err) => {
