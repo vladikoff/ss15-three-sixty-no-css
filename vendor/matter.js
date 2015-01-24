@@ -5909,7 +5909,7 @@ var Render = {};
             return image;
 
         image = render.textures[imagePath] = new Image();
-        image.crossOrigin = 'anonymous';
+
         image.src = imagePath;
 
         return image;
