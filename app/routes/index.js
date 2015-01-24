@@ -82,8 +82,8 @@ export default Ember.Route.extend({
           })
         })
       }).then((g)=> {
-        // TODO: START A FLIPPIN GAME
-        console.log('start game against', g.get('opponent'))
+        this.controllerFor('game').set('game', g)
+        this.transitionTo('game')
       })
       .catch((err) => {
         // TODO: Do something with this
