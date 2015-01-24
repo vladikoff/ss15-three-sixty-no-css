@@ -42,18 +42,10 @@ export default Ember.Route.extend({
       })
     },
     findMatch: function () {
-      //this.transitionTo('game');
-      var username = this.controllerFor('navbar').get('username')
+      var username = this.controllerFor('navbar').get('username');
 
-      // This player is now available
-      var game = this.store.createRecord('game', {
-        id: username,
-        opponent: '',
-      })
-
-      game.save().then(() => {
-        return this.store.findAll('game')
-      }).then((data) => {
+      // Find open games
+      this.store.findAll('game').then((data) => {
         var foundGame = data.get('content').reduce((cur, next) => {
           if (cur === false) {
             // Cant play against yourself
@@ -66,30 +58,51 @@ export default Ember.Route.extend({
           }
         }, false)
 
-        // Couldnt find a game
+        // Couldnt find a game, make the player available to others
         if (!foundGame) {
-          throw new Error('Could not find a game')
+          return this.store.createRecord('game', { id: username }).save().then(() => {
+            this.send('waitForMatch')
+          })
         }
 
-        // Found game, set opponent
-        var opponent = foundGame.get('id')
-        game.set('opponent', opponent)
-        return game.save().then((g) => {
-          return this.store.find('game', opponent).then((otherGame) => {
-            otherGame.set('opponent', username)
-            return otherGame.save()
-          }).then(() => {
-            return this.store.find('user', opponent)
-          })
+        // Found game, set this user as opponent and start game
+        foundGame.set('opponent', username)
+        return foundGame.save().then(() => {
+          Ember.Logger.info('Starting a game with: ', foundGame.get('id'))
+          this.transitionTo('game')
         })
-      }).then((opponent)=> {
-        this.controllerFor('game').set('opponent', opponent)
-        this.transitionTo('game')
       })
       .catch((err) => {
         // TODO: Do something with this
         throw err;
       });
+    },
+    waitForMatch: function() {
+      var username = this.controllerFor('navbar').get('username');
+      Ember.Logger.info('Waiting for a game...');
+
+      // Poll for if someone has put you as their opponent
+      this.store.findAll('game').then((data) => {
+         var foundGame = data.get('content').reduce((cur, next) => {
+          if (cur === false) {
+            if (next.get('opponent') === username) return next
+            return false
+          } else {
+            return cur
+          }
+        }, false)
+
+        // found a game!
+        if (foundGame) {
+          Ember.Logger.info('Found a game after waiting! ', foundGame.get('id'));
+          return this.transitionTo('game')
+        }
+
+        // No game found, keep polling
+        Ember.run.later(() => {
+          this.send('waitForMatch')
+        }, 1000)
+      })
     },
     logout: function () {
       location.reload();
