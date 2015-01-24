@@ -14,7 +14,7 @@ var ApplicationController = Ember.Controller.extend({
       beforeSend: (xhr) => {
         // Why doesnt this work? Its needed for the GH API
         //xhr.setRequestHeader('User-Agent', 'Super App')
-        xhr.setRequestHeader('Authorization', this.get('ghToken'))
+        xhr.setRequestHeader('Authorization', 'token ' + this.get('ghToken'))
       },
     })
   }

@@ -8,7 +8,7 @@ export default Ember.Route.extend({
         if (error) {
           console.log("Login Failed!", error);
         } else {
-          this.controllerFor('application').set('ghToken', authData.token);
+          this.controllerFor('application').set('ghToken', authData.github.accessToken);
           console.log("Authenticated successfully with payload:", authData);
 
           this.controllerFor('application').gh('users/shama').then(function(data) {
