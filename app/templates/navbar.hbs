@@ -5,9 +5,10 @@
 
   <ul class="nav navbar-nav">
     {{#if username}}
-    <li class="avatar">{{avatar}}</li>
-    <li class="username">{{username}}</li>
-    <li><button {{action "logout"}}>Log Out</button></li>
+    <li class="user" {{action "logout"}}>
+      <span class="avatar"><img {{bind-attr src=avatar}} /></span>
+      <span class="username">{{username}}</span>
+    </li>
     {{/if}}
   </ul>
 

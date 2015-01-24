@@ -1,4 +1,22 @@
-.username {
+.user {
+  padding: 15px;
+  padding-top: 0px;
+  padding-bottom: 3px;
+}
+
+.user:hover {
+  background: #333;
+}
+
+li {
   line-height: 40px;
   font-size: 13px;
+}
+
+.avatar img {
+  width: 30px;
+  border: 2px solid #FFF;
+  border-radius: 30px;
+  margin-top: 5px;
+  margin-right: 10px;
 }

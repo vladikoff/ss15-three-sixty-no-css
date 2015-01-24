@@ -1,6 +1,9 @@
 @import "bs";
 @import "ui/chrome";
-@import "ui/navbar";
+
+.navbar {
+  @import "ui/navbar";
+}
 
 * {
   box-sizing: Border-box;
