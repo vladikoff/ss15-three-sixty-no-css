@@ -94,12 +94,7 @@ loadInitializers(App, config.modulePrefix);
   };
 
   // call init when the page has loaded fully
-
-  if (window.addEventListener) {
-    window.addEventListener('load', Demo.init);
-  } else if (window.attachEvent) {
-    window.attachEvent('load', Demo.init);
-  }
+  window.addEventListener('load', Demo.init);
 
   // each demo scene is set up in its own function, see below
 
@@ -1237,21 +1232,6 @@ loadInitializers(App, config.modulePrefix);
       document.addEventListener('mozfullscreenchange', fullscreenChange);
       document.addEventListener('fullscreenchange', fullscreenChange);
     }
-
-
-    demoSelect.addEventListener('change', function(e) {
-      Demo[_sceneName = e.target.value]();
-      Gui.update(_gui);
-
-      var scrollY = window.scrollY;
-      window.location.hash = _sceneName;
-      window.scrollY = scrollY;
-    });
-
-    demoReset.addEventListener('click', function(e) {
-      Demo[_sceneName]();
-      Gui.update(_gui);
-    });
   };
 
   Demo.fullscreen = function(){
