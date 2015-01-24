@@ -16,7 +16,8 @@ export default Ember.View.extend({
     var boxShape;
     var markerMaterial;
     var jointBody, constrainedBody, mouseConstraint;
-
+    var SCREEN_WIDTH = 1170, SCREEN_HEIGHT = 600;
+    //var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var N = 1;
 
     var container, camera, scene, renderer, projector;
@@ -43,9 +44,12 @@ export default Ember.View.extend({
       scene.fog = new THREE.Fog( 0x000000, 500, 10000 );
 
       // camera
-      camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.5, 10000 );
-      camera.position.set(10, 2, 0);
-      camera.quaternion.setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
+      camera = new THREE.PerspectiveCamera( 45, SCREEN_WIDTH / SCREEN_HEIGHT, 0.5, 10000 );
+      window.CAMERA = camera
+      window.SCENE = scene
+      camera.position.set(24, 15, 0);
+      //camera.quaternion.setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
+      //camera.lookAt(scene.position);
       scene.add(camera);
 
       // lights
@@ -73,7 +77,7 @@ export default Ember.View.extend({
       light.shadowDarkness = 0.5;
 
       scene.add( light );
-      var SCREEN_WIDTH = 1170, SCREEN_HEIGHT = 600;
+
 
       // floor
       geometry = new THREE.PlaneGeometry( 100, 100, 1, 1 );
@@ -92,10 +96,13 @@ export default Ember.View.extend({
       var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0x888888 } );
       for(var i=0; i<N; i++){
         var cubeMesh = new THREE.Mesh(cubeGeo, cubeMaterial);
+        console.log(cubeMesh.position)
         cubeMesh.castShadow = true;
         meshes.push(cubeMesh);
         scene.add(cubeMesh);
+        camera.lookAt(cubeMesh.position);
       }
+      getAvatar();
 
       renderer = new THREE.WebGLRenderer( { antialias: true } );
       renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -107,7 +114,7 @@ export default Ember.View.extend({
       renderer.gammaOutput = true;
       renderer.shadowMapEnabled = true;
 
-      window.addEventListener( 'resize', onWindowResize, false );
+      //window.addEventListener( 'resize', onWindowResize, false );
 
       window.addEventListener("mousemove", onMouseMove, false );
       window.addEventListener("mousedown", onMouseDown, false );
@@ -129,6 +136,9 @@ export default Ember.View.extend({
     }
 
     function onMouseMove(e){
+      var entity = findNearestIntersectingObject(e.clientX,e.clientY,camera,meshes);
+      console.log(entity);
+      
       // Move and project on the plane
       if (gplane && mouseConstraint) {
         var pos = projectOntoPlane(e.clientX,e.clientY,gplane,camera);
@@ -213,6 +223,26 @@ export default Ember.View.extend({
       return closest;
     }
 
+    function getAvatar() {
+      var image = new Image();
+      image.crossOrigin = "Anonymous";
+
+      image.addEventListener('load', function () {
+        console.log('loaded img');
+        var texture = new THREE.Texture(image);
+        texture.needsUpdate = true;
+        var geometry = new THREE.BoxGeometry( 1, 1, 1, 10, 10 );
+        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+        mesh.rotation.y = Math.PI;
+        mesh.position.x = -0.5;
+        mesh.position.y = 2;
+        window.SCENE.add(mesh);
+      }, false);
+
+      image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
+
+    }
+
     // Function that returns a raycaster to use to find intersecting objects
     // in a scene given screen pos and a camera, and a projector
     function getRayCasterFromScreenCoord (screenX, screenY, camera, projector) {
@@ -295,7 +325,7 @@ export default Ember.View.extend({
 
       // Apply anti-quaternion to vector to tranform it into the local body coordinate system
       var antiRot = constrainedBody.quaternion.inverse();
-      pivot = antiRot.vmult(v1); // pivot is not in local body coordinates
+      var pivot = antiRot.vmult(v1); // pivot is not in local body coordinates
 
       // Move the cannon click marker particle to the click position
       jointBody.position.set(x,y,z);
