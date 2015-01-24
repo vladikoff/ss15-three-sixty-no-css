@@ -27,13 +27,11 @@ html, body {
   border: 5px solid grey;
 }
 
-.cards {
-  li {
-    list-style: none;
-    float: left;
-    width: 15%;
-    padding: 1em;
-  }
+.card {
+  list-style: none;
+  float: left;
+  width: 15%;
+  padding: 1em;
   .inner {
     border: 2px solid #333;
     padding: .5em;
@@ -51,6 +49,11 @@ html, body {
     margin-bottom: .2em;
     img {
       width: 100%;
+    }
+  }
+  &.selected {
+    .inner {
+      border: 2px solid #ffcc00;
     }
   }
 }
