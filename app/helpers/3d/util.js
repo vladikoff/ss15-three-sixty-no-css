@@ -49,7 +49,29 @@ export default {
 
     });
 
-  }
+  },
+
+  getAvatar: function () {
+  var image = new Image();
+  image.crossOrigin = "Anonymous";
+
+  image.addEventListener('load', function () {
+    console.log('loaded img');
+    var texture = new THREE.Texture(image);
+    texture.needsUpdate = true;
+    var geometry = new THREE.BoxGeometry( 30, 30, 0.1 );
+    var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+    mesh.rotation.y = Math.PI;
+    mesh.position.x = 0;
+    mesh.position.y = 15;
+    mesh.position.z = -80;
+    window.SCENE.add(mesh);
+  }, false);
+
+  image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
+
+}
+
 
 }
 

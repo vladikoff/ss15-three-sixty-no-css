@@ -19,16 +19,16 @@ export default Ember.View.extend({
 
       camera = new THREE.PerspectiveCamera(70, 16 / 10 , 1, 10000);
       camera.position.z = 50;
-      camera.position.y = 50;
+      camera.position.y = 40;
       window.CAMERA = camera;
-      controls = new THREE.TrackballControls(camera);
+      /*controls = new THREE.TrackballControls(camera);
       controls.rotateSpeed = 1.0;
       controls.zoomSpeed = 1.2;
       controls.panSpeed = 0.8;
       controls.noZoom = false;
       controls.noPan = false;
       controls.staticMoving = true;
-      controls.dynamicDampingFactor = 0.3;
+      controls.dynamicDampingFactor = 0.3;*/
       scene = new THREE.Scene();
       scene.add(new THREE.AmbientLight(0x505050));
       window.SCENE = scene;
@@ -54,6 +54,7 @@ export default Ember.View.extend({
       floor.position.y = -0.5;
       floor.rotation.x = Math.PI / 2;
       scene.add(floor);
+      camera.lookAt(new THREE.Vector3(0,-20,-20));
 /*
       var geometry = new THREE.BoxGeometry( 10, 10, 10 );
       for (var i = 0; i < 200; i++) {
@@ -90,29 +91,9 @@ export default Ember.View.extend({
       renderer.shadowMapType = THREE.PCFShadowMap;
       container.appendChild(renderer.domElement);
 
-      getAvatar();
+      util.getAvatar(scene);
       util.createPlanes(scene);
 
-      function getAvatar() {
-        var image = new Image();
-        image.crossOrigin = "Anonymous";
-
-        image.addEventListener('load', function () {
-          console.log('loaded img');
-          var texture = new THREE.Texture(image);
-          texture.needsUpdate = true;
-          var geometry = new THREE.BoxGeometry( 20, 20, 0.1 );
-          var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
-          mesh.rotation.y = Math.PI;
-          mesh.position.x = 0;
-          mesh.position.y = 10;
-          mesh.position.z = -100;
-          window.SCENE.add(mesh);
-        }, false);
-
-        image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
-
-      }
 
 
 
@@ -154,7 +135,7 @@ export default Ember.View.extend({
           INTERSECTED = intersects[0].object;
           INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
           plane.position.copy(INTERSECTED.position);
-          plane.lookAt(camera.position);
+          //plane.lookAt(camera.position);
         }
         container.style.cursor = 'pointer';
       } else {
@@ -165,14 +146,13 @@ export default Ember.View.extend({
     }
 
     function onDocumentMouseDown(event) {
-      controls.enabled = true;
       event.preventDefault();
       var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
       projector.unprojectVector(vector, camera);
       var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
       var intersects = raycaster.intersectObjects(objects);
       if (intersects.length > 0) {
-        controls.enabled = false;
+        //controls.enabled = false;
         SELECTED = intersects[0].object;
         var intersects = raycaster.intersectObject(plane);
         offset.copy(intersects[0].point).sub(plane.position);
@@ -182,7 +162,7 @@ export default Ember.View.extend({
 
     function onDocumentMouseUp(event) {
       event.preventDefault();
-      controls.enabled = true;
+      //controls.enabled = true;
       if (INTERSECTED) {
         plane.position.copy(INTERSECTED.position);
         SELECTED = null;
@@ -197,7 +177,7 @@ export default Ember.View.extend({
     }
 
     function render() {
-      controls.update();
+      //controls.update();
       renderer.render(scene, camera);
     }
 
