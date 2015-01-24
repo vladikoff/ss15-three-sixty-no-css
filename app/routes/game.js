@@ -65,4 +65,16 @@ export default Ember.Route.extend({
       })
     },
   },
+
+  // Manually end your turn
+  endTurn: function() {
+    store.find('game', gameCtrl.get('id')).then((game) => {
+      var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
+      game.set('lastTurnSwitch', moment().utc())
+      game.set('turn', opponent)
+      return game.save()
+    }).then(() => {
+      this.controllerFor('game').set('turn', false)
+    })
+  },
 });
