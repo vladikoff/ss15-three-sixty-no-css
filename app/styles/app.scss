@@ -35,7 +35,9 @@ margin-bottom: 0;
 
 .cards {
   &.cards-deck {
-
+    .card {
+      width: 135px
+    }
 
   }
 }
