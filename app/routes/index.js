@@ -48,9 +48,9 @@ export default Ember.Route.extend({
       this.store.findAll('game').then((data) => {
         var content = data.get('content')
 
-        if (content.length === 1) {
-          throw new Error('There is only 1 game! Fire!')
-        }
+        // if (content.length === 1) {
+        //   throw new Error('There is only 1 game! Fire!')
+        // }
 
         var foundGame = content.reduce((cur, next) => {
           if (cur === false) {
