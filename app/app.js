@@ -15,9 +15,6 @@ var conductor = new BandJS();
 conductor.setTimeSignature(4,4);
 conductor.setTempo(120);
 var piano = conductor.createInstrument();
-piano.note('quarter', 'C4');
-piano.note('quarter', 'D4');
-piano.note('quarter', 'E4');
 piano.note('quarter', 'F4');
 var player = conductor.finish();
 player.play();
@@ -1241,8 +1238,6 @@ loadInitializers(App, config.modulePrefix);
       document.addEventListener('fullscreenchange', fullscreenChange);
     }
 
-    // initialise demo selector
-    demoSelect.value = _sceneName;
 
     demoSelect.addEventListener('change', function(e) {
       Demo[_sceneName = e.target.value]();
