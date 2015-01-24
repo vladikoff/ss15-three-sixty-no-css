@@ -72,7 +72,7 @@ loadInitializers(App, config.modulePrefix);
     Engine.run(_engine);
 
     // default scene function name
-    _sceneName = 'mixed';
+    _sceneName = 'sprites';
 
     // get the scene function name from hash
     if (window.location.hash.length !== 0)
@@ -1082,28 +1082,14 @@ loadInitializers(App, config.modulePrefix);
     ]);
 
     var stack = Composites.stack(20, 20, 15, 4, 0, 0, function(x, y, column, row) {
-      if (Math.random() > 0.35) {
-        return Bodies.rectangle(x, y, 64, 64, {
-          render: {
-            strokeStyle: '#ffffff',
-            sprite: {
-              texture: './img/box.png'
-            }
+      return Bodies.rectangle(x, y, 64, 64, {
+        render: {
+          strokeStyle: '#ffffff',
+          sprite: {
+            texture: 'https://avatars3.githubusercontent.com/u/99604?v=3&s=460'
           }
-        });
-      } else {
-        return Bodies.circle(x, y, 46, {
-          density: 0.0005,
-          frictionAir: 0.06,
-          restitution: 0.3,
-          friction: 0.01,
-          render: {
-            sprite: {
-              texture: './img/ball.png'
-            }
-          }
-        });
-      }
+        }
+      });
     });
 
     World.add(_world, stack);
