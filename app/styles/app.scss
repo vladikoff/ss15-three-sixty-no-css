@@ -46,6 +46,7 @@ border-bottom: 2px solid white;
 }
 
 .cards {
+  list-style: none;
   &.cards-deck {
     .card {
       width: 135px

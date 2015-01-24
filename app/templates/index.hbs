@@ -12,14 +12,18 @@
   <h1>Current Card Deck</h1>
   <ul class="cards">
     {{#each card in deck}}
-      {{big-card data=card action="deselect"}}
+      <li>
+        {{small-card data=card action="deselect"}}
+      </li>
     {{/each}}
   </ul>
 
   <h2>Your Card Collection</h2>
   <ul class="cards">
     {{#each card in library}}
+      <li>
       {{small-card data=card action="select"}}
+      </li>
     {{/each}}
   </ul>
 
@@ -94,7 +98,7 @@
   </div>
 
 {{/if}}
-
+<!--
 <div class="ember-view big-card">
   <div class="inner">
     <div class="name"><a href="https://github.com/maryrosecook/gitlet" data-bindattr-549="549" target="_blank">gitlet</a></div>
@@ -109,18 +113,4 @@
     </div>
   </div>
 </div>
-
-<div class="ember-view small-card">
-  <div class="inner">
-    <div class="name"><a href="https://github.com/maryrosecook/gitlet" data-bindattr-549="549" target="_blank">gitlet</a></div>
-    <div class="img"><img src="https://avatars.githubusercontent.com/u/2716?v=3" data-bindattr-551="551"></div>
-    <div class="owner">maryrosecook</div>
-    <div class="type">JavaScript</div>
-    <div class="desc">Git implemented in JavaScript</div>
-    <div class="stats">
-      <div class="stats-atk">681 <span>HIT</span></div>
-      <div class="stats-mana"> <span>MANA</span></div>
-      <div class="stats-def">29 <span>HP</span></div>
-    </div>
-  </div>
-</div>
+-->
