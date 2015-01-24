@@ -60,12 +60,12 @@ export default Ember.View.extend({
       floor.rotation.x = Math.PI / 2;
       scene.add(floor);
       camera.lookAt(new THREE.Vector3(0,-20,-20));
-/*
+
       var geometry = new THREE.BoxGeometry( 10, 10, 10 );
-      for (var i = 0; i < 200; i++) {
+      for (var i = 0; i < 10; i++) {
         var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff}));
         object.material.ambient = object.material.color;
-        object.position.x = i * 20;
+        object.position.x = (i  * 20) + 100;
 
         object.scale.x = Math.random() * 2 + 1;
         object.scale.y = Math.random() * 2 + 1;
@@ -74,10 +74,12 @@ export default Ember.View.extend({
         object.receiveShadow = true;
         scene.add(object);
         objects.push(object);
-      }*/
 
+      }
 
-      //camera.lookAt(mesh.position);
+      util.getAvatar(scene);
+      util.createPlanes(scene, objects);
+      util.createCardSpots(scene);
 
       plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
         color: 0x000000,
@@ -95,11 +97,6 @@ export default Ember.View.extend({
       renderer.shadowMapEnabled = true;
       renderer.shadowMapType = THREE.PCFShadowMap;
       container.appendChild(renderer.domElement);
-
-      util.getAvatar(scene);
-      util.createPlanes(scene);
-
-
 
 
       renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -130,7 +127,7 @@ export default Ember.View.extend({
       var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
       if (SELECTED) {
         var intersects = raycaster.intersectObject(plane);
-        SELECTED.position.copy(intersects[0].point.sub(offset));
+       // SELECTED.position.copy(intersects[0].point.sub(offset));
         return;
       }
       var intersects = raycaster.intersectObjects(objects);
@@ -159,8 +156,8 @@ export default Ember.View.extend({
       if (intersects.length > 0) {
         //controls.enabled = false;
         SELECTED = intersects[0].object;
-        var intersects = raycaster.intersectObject(plane);
-        offset.copy(intersects[0].point).sub(plane.position);
+        console.log(SELECTED);
+
         container.style.cursor = 'move';
       }
     }
@@ -169,7 +166,7 @@ export default Ember.View.extend({
       event.preventDefault();
       //controls.enabled = true;
       if (INTERSECTED) {
-        plane.position.copy(INTERSECTED.position);
+        //plane.position.copy(INTERSECTED.position);
         SELECTED = null;
       }
       container.style.cursor = 'auto';

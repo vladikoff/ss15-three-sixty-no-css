@@ -1,18 +1,21 @@
 export default {
-  createPlanes: function (scene) {
+  createPlanes: function (scene, objects) {
     var pos = [
       // YOURS
       {
+        add: true,
         x: 0,
         z: 60,
         c: 0x7FF72E
       },
       {
+        add: true,
         x: -30,
         z: 60,
         c: 0x00FBE4
       },
       {
+        add: true,
         x: 30,
         z: 60,
         c: 0xFF2F1A
@@ -38,16 +41,22 @@ export default {
 
     pos.forEach(position => {
       var geometry = new THREE.BoxGeometry( 30, 0.1, 120 );
-      var material = new THREE.MeshLambertMaterial({color: position.c, opacity: 0.99, transparent: true});
-      var object = new THREE.Mesh(geometry, material);
-      object.rotation.y = Math.PI;
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: position.c}));
+      object.material.ambient = object.material.color;
       object.position.x = position.x;
       object.position.y = 2;
       object.position.z = position.z;
-
+      object.castShadow = true;
+      object.receiveShadow = true;
       scene.add(object);
 
+      if (position.add) {
+        objects.push(object);
+      }
+
     });
+
+    return objects
 
   },
 
@@ -70,7 +79,80 @@ export default {
 
   image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
 
-}
+  },
+
+  createCardSpots: function (scene) {
+    var pos = [
+      // YOURS
+      {
+        x: 0,
+        z: 20,
+      },
+      {
+        x: -25,
+        z: 20,
+      },
+      {
+        x: 25,
+        z: 20,
+      },
+      {
+        x: 0,
+        z: 35,
+      },
+      {
+        x: -25,
+        z: 35,
+      },
+      {
+        x: 25,
+        z: 35,
+      },
+
+/////////////////////
+      {
+        x: 0,
+        z: -5,
+      },
+      {
+        x: -25,
+        z: -5,
+      },
+      {
+        x: 25,
+        z: -5,
+      },
+      {
+        x: 0,
+        z: -20,
+      },
+      {
+        x: -25,
+        z: -20,
+      },
+      {
+        x: 25,
+        z: -20,
+      },
+
+    ];
+
+    var objects = [];
+
+    pos.forEach(position => {
+      var geometry = new THREE.BoxGeometry( 5, 5, 5);
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xD25025}));
+      object.position.x = position.x;
+      object.position.y = 10;
+      object.position.z = position.z;
+      scene.add(object);
+      //objects.push(object);
+
+    });
+
+    return objects;
+
+  },
 
 
 }
