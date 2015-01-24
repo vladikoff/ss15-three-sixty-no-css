@@ -1,3 +1,7 @@
+* {
+  box-sizing: Border-box;
+}
+
 html, body {
   margin: 0px;
 }
@@ -21,4 +25,32 @@ html, body {
   display: block;
   margin: 0 auto;
   border: 5px solid grey;
+}
+
+.cards {
+  li {
+    list-style: none;
+    float: left;
+    width: 15%;
+    padding: 1em;
+  }
+  .inner {
+    border: 2px solid #333;
+    padding: .5em;
+    background-color: #ddd;
+    font-size: .8em;
+  }
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .img {
+    border: 1px solid #333;
+    padding: .2em;
+    margin-bottom: .2em;
+    img {
+      width: 100%;
+    }
+  }
 }
