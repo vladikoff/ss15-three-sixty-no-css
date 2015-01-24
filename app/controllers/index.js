@@ -17,4 +17,7 @@ export default Ember.Controller.extend({
 
   // All the cards you have available
   library: [],
+
+  // Cards in your deck
+  deck: [],
 });

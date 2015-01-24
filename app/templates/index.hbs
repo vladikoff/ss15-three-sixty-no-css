@@ -1,5 +1,13 @@
 {{outlet}}
 
+<h2>Your Card Deck</h2>
+<ul class="cards">
+  {{#each card in deck}}
+    {{a-card data=card}}
+  {{/each}}
+</ul>
+
+<h2>Your Card Collection</h2>
 <ul class="cards">
 {{#each card in library}}
   {{a-card data=card}}
