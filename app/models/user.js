@@ -2,6 +2,6 @@ import Ember from 'ember';
 
 export default DS.Model.extend({
   cards: DS.hasMany('card'),
-  createdAt: DS.attr('date', { defaultValue: function() { return new Date() } }),
+  createdAt: DS.attr('number', { defaultValue: function() { return moment().utc() } }),
   hp: DS.attr('number'),
 });
