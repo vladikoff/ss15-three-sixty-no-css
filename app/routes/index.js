@@ -44,8 +44,16 @@ export default Ember.Route.extend({
     findMatch: function () {
       var username = this.controllerFor('navbar').get('username');
 
-      // Find open games
-      this.store.findAll('game').then((data) => {
+      // If you already had an abandoned game
+      this.store.find('game', username).then((game) => {
+        return game.destroyRecord()
+      }).catch((err) => {
+        // no existing game, continue
+        return Ember.RSVP.resolve()
+      }).then(() => {
+        return this.store.findAll('game')
+      }).then((data) => {
+        // Find open games
         var content = data.get('content')
 
         // if (content.length === 1) {
