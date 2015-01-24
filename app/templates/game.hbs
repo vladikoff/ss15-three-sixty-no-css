@@ -1,18 +1,18 @@
 {{outlet}}
 
-<div class="clock">{{clock}}s</div>
-<div class="turn">
-  {{#if turn}}
-    {{id}}'s turn
-  {{else}}
-    {{opponent}}'s turn
-  {{/if}}
-  {{#if opponentProbablyLeft}}
-    Your opponent has probably left :(
-  {{/if}}
+<div id="game-view">
+  <div class="clock">{{clock}}s</div>
+  <div class="turn">
+    {{#if turn}}
+      {{id}}'s turn
+    {{else}}
+      {{opponent}}'s turn
+    {{/if}}
+    {{#if opponentProbablyLeft}}
+      Your opponent has probably left :(
+    {{/if}}
 </div>
 
-<div id="game-view">
   <div id="render"></div>
 
   <ul class="cards cards-deck">
