@@ -16,19 +16,16 @@ export default Ember.Route.extend({
     // Get game state and setup controller for it
   },
 
-  afterModel: function() {
-    Ember.run.later(() => {
-      this.send('tick')
-    })
-  },
-
   actions: {
+    didTransition: function() {
+      // Start up the tick
+      this.send('tick')
+    },
+
     // THE MAIN GAME TICK
     tick: function() {
-      Ember.Logger.info('Game tick...');
-
       var interval = 1000
-      var clockMax = 30 // in intervals
+      var clockMax = 30 * 1000 // in intervals
 
       var promises = [];
       var gameCtrl = this.controllerFor('game');
@@ -38,26 +35,24 @@ export default Ember.Route.extend({
 
       var p = store.find('game', gameCtrl.get('id')).then((game) => {
         var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
+        var delta = moment().utc() - game.get('lastTurnSwitch')
+        //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
-        // If it is our turn
+        // Is it our turn?
         if (game.get('turn') === username) {
-          if (clock === -1) {
-            // Start our turn
-            clock = clockMax;
-            gameCtrl.set('clock', clockMax);
-          } else if (clock === 0) {
-            // Our turn is over
-            clock = -1;
-            game.set('turn', opponent);
-          } else {
-            // Keep going with our turn
-            clock--;
+          // Has our time expired?
+          if (delta >= clockMax) {
+            Ember.Logger.info('Switching turns...');
+            game.set('lastTurnSwitch', moment().utc())
+            game.set('turn', opponent)
           }
-          gameCtrl.setProperties({clock: clock, turn: true})
+          gameCtrl.set('turn', true)
         } else {
-          // Not our turn
-          gameCtrl.setProperties({ clock: 0, turn: false });
+          // TODO: Set clock decrement
+          gameCtrl.set('turn', false)
         }
+
+        gameCtrl.set('clock', parseInt((clockMax - delta) / 1000))
 
         return game.save();
       });
@@ -68,6 +63,6 @@ export default Ember.Route.extend({
           this.send('tick')
         }, interval)
       })
-    }
+    },
   },
 });

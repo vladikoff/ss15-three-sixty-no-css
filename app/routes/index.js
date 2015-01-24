@@ -46,7 +46,13 @@ export default Ember.Route.extend({
 
       // Find open games
       this.store.findAll('game').then((data) => {
-        var foundGame = data.get('content').reduce((cur, next) => {
+        var content = data.get('content')
+
+        if (content.length === 1) {
+          throw new Error('There is only 1 game! Fire!')
+        }
+
+        var foundGame = content.reduce((cur, next) => {
           if (cur === false) {
             // Cant play against yourself
             if (username === next.get('id')) return false
