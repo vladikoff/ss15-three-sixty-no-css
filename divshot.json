@@ -1,6 +1,6 @@
 {
   "name": "heroes-of-github",
-  "root": "./app",
+  "root": "./dist",
   "clean_urls": true,
   "cache_control": {},
   "routes": {
