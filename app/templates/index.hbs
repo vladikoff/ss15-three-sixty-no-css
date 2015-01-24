@@ -1,17 +1,30 @@
 {{outlet}}
 
-<button {{action "findMatch"}}>Start a Game</button>
+<button style="position: absolute; right: 0; top: 0" {{action "findMatch"}}>##DEBUG_BUTTON Start a Game</button>
 
-<h2>Your Card Deck</h2>
-<ul class="cards">
-  {{#each card in deck}}
-    {{a-card data=card}}
-  {{/each}}
-</ul>
+{{#if deck}}
 
-<h2>Your Card Collection</h2>
-<ul class="cards">
-{{#each card in library}}
-  {{a-card data=card}}
-{{/each}}
-</ul>
+  <h2>Your Card Deck</h2>
+  <ul class="cards">
+    {{#each card in deck}}
+      {{a-card data=card}}
+    {{/each}}
+  </ul>
+
+  <h2>Your Card Collection</h2>
+  <ul class="cards">
+    {{#each card in library}}
+      {{a-card data=card}}
+    {{/each}}
+  </ul>
+
+{{else}}
+
+
+  <div class="jumbotron">
+    <h1>Heroes of GitHub</h1>
+    <p>The open source card game based on GitHub statistics.</p>
+    <p><button class="btn btn-primary btn-lg" {{action "login"}}>Login With GitHub</button></p>
+  </div>
+
+{{/if}}
