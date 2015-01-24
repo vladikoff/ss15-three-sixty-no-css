@@ -1083,9 +1083,10 @@ loadInitializers(App, config.modulePrefix);
 
     var stack = Composites.stack(20, 20, 15, 4, 0, 0, function(x, y, column, row) {
       var src = [
-        'https://avatars2.githubusercontent.com/u/128755?v=3&s=200',
-        'https://avatars3.githubusercontent.com/u/99604?v=3&s=200',
-        'https://avatars3.githubusercontent.com/u/181635?v=3&s=200',
+        'https://avatars2.githubusercontent.com/u/128755?v=3&s=64',
+        'https://avatars3.githubusercontent.com/u/99604?v=3&s=64',
+        'https://avatars3.githubusercontent.com/u/181635?v=3&s=64',
+        'https://avatars3.githubusercontent.com/u/849665?v=3&s=64',
       ]
       var img = src[parseInt(Math.random() * src.length)]
       return Bodies.rectangle(x, y, 64, 64, {
