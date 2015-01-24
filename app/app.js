@@ -5,6 +5,17 @@ import config from './config/environment';
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
+// Give jQuery real promises
+var origajax = Ember.$.ajax
+Ember.$.ajax = function() {
+  var args = Array.prototype.slice.call(arguments)
+  var self = this
+  return new Ember.RSVP.Promise(function(resolve, reject) {
+    args.push(resolve)
+    origajax.apply(self, args).fail(reject)
+  })
+}
+
 var App = Ember.Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
