@@ -35,12 +35,9 @@ export default Ember.Route.extend({
           library.pushObject(Card.create(star))
         });
 
-        library.forEach(function (card) {
-          if (deck.length < 8) {
-            deck.pushObject(card)
-            window.__DECK = deck; // TODO: CRUISE CONTROLLLLL
-          }
-        });
+        // Get first 8 cards for a deck
+        var deck = library.slice(0, 8)
+        this.controllerFor('game').set('deck', deck)
       })
     },
     findMatch: function () {
