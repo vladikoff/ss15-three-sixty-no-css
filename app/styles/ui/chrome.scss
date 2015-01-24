@@ -39,7 +39,7 @@ html, body {
 	border:1px solid #e65f44;
 	display:inline-block;
 	cursor:pointer;
-	color:#c92200;
+	color: #3C3C3C;
 	font-family:arial;
 	font-size:15px;
 	font-weight:bold;
@@ -57,6 +57,7 @@ html, body {
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2ab1e', endColorstr='#f0c911',GradientType=0);
 	background-color:#f2ab1e;
 }
+
 .btn-action:active {
 	position:relative;
 	top:1px;
