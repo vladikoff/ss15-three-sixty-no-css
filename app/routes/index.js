@@ -37,44 +37,64 @@ export default Ember.Route.extend({
 
         // Get first 8 cards for a deck
         var deck = library.slice(0, 8)
-        this.controllerFor('game').set('deck', deck)
+        this.controllerFor('game').set('deck', deck);
       })
     },
     findMatch: function () {
-      this.transitionTo('game');
-      // find all lobbies
-      // join a lobby with 1 player
-      /*this.store.findAll('game').then((data) => {
+      //this.transitionTo('game');
+      var username = this.controllerFor('navbar').get('username')
+
+      // This player is now available
+      var game = this.store.createRecord('game', {
+        id: username,
+        opponent: '',
+      })
+
+      game.save().then(() => {
+        return this.store.findAll('game')
+      }).then((data) => {
         var foundGame = false;
         var content = data.get('content');
+
         Ember.Logger.info('Available games:');
         Ember.Logger.info(content);
 
+        var foundGame = content.reduce((cur, next) => {
+          if (cur === false) {
+            // Cant play against yourself
+            if (username === next.get('id')) return false
+            // If player is already player but not yourself
+            if (next.get('opponent') !== '' && next.get('opponent') !== username) return false
+            return next
+          } else {
+            return cur
+          }
+        }, false)
 
-        if (content.length > 0) {
-        // if there is a player to match with
-          content.forEach(function (game) {
-            var op = game.get('opponent');
-
-            Ember.Logger.info(op);
-          });
-        }
-
+        // Couldnt find a game
         if (!foundGame) {
-          // if no lobbies found then make a new lobby
-          var lobby = this.store.createRecord('game', {
-            id: 'vladikoff',
-            createdAt: new Date(),
-            opponent: 'test'
-          });
-
-          lobby.save();
-          Ember.Logger.info('Created a game');
+          throw new Error('Could not find a game')
         }
 
-
+        // Found game, set opponent
+        var opponent = foundGame.get('id')
+        game.set('opponent', opponent)
+        return game.save().then((g) => {
+          return this.store.find('game', opponent).then((otherGame) => {
+            otherGame.set('opponent', username)
+            return otherGame.save()
+          }).then(() => {
+            return g
+          })
+        })
+      }).then((g)=> {
+        // TODO: START A FLIPPIN GAME
+        console.log('start game against', g.get('opponent'))
+      })
+      .catch((err) => {
+        // TODO: Do something with this
+        throw err;
       });
-*/
     },
     logout: function () {
       location.reload();
