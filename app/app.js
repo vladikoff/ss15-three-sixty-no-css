@@ -1087,7 +1087,7 @@ loadInitializers(App, config.modulePrefix);
         'https://avatars3.githubusercontent.com/u/99604?v=3&s=200',
         'https://avatars3.githubusercontent.com/u/181635?v=3&s=200',
       ]
-      var img = src[parseInt(Math.random() * src.length) - 1]
+      var img = src[parseInt(Math.random() * src.length)]
       return Bodies.rectangle(x, y, 64, 64, {
         render: {
           strokeStyle: '#ffffff',
