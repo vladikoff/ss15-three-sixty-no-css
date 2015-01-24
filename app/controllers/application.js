@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var ApplicationController = Ember.Controller.extend({
+export default Ember.Controller.extend({
   ghToken: Ember.computed(function(key, val) {
     // Save to local storage?
     return val
@@ -24,5 +24,3 @@ var ApplicationController = Ember.Controller.extend({
     })
   }
 });
-
-export default ApplicationController;

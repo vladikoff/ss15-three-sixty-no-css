@@ -1,3 +1,13 @@
 html, body {
   margin: 20px;
 }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: .5em;
+  background-color: #333;
+  color: #ddd;
+}
