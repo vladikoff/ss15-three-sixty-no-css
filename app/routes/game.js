@@ -1,10 +1,17 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  redirect: function() {
+    this.username = this.controllerFor('navbar').get('username');
+
+    if (!this.username) {
+      this.transitionTo('index');
+    }
+  },
+
   model: function() {
-    // User is not logged in
-    var username = this.controllerFor('navbar').get('username')
-    // TODO: DISABLED FOR DEBUGGING if (!username) return this.transitionTo('index')
+    console.log(this.username);
+
     // Get game state and setup controller for it
   }
 });
