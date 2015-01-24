@@ -1,8 +1,10 @@
 {{outlet}}
-<div id="render"></div>
+<div id="game-view">
+  <div id="render"></div>
 
-<ul class="cards">
-{{#each card in deck}}
-  {{a-card data=card}}
-{{/each}}
-</ul>
+  <ul class="cards cards-deck">
+  {{#each card in deck}}
+    {{a-card data=card}}
+  {{/each}}
+  </ul>
+</div>

@@ -25,7 +25,7 @@ export default Ember.View.extend({
       // SCENE
       scene = new THREE.Scene();
       // CAMERA
-      var SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600;
+      var SCREEN_WIDTH = 1170, SCREEN_HEIGHT = 600;
       var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
       camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
       scene.add(camera);
