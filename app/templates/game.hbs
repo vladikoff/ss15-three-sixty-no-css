@@ -1,4 +1,14 @@
 {{outlet}}
+
+<div class="clock">{{clock}}s</div>
+<div class="turn">
+  {{#if turn}}
+    Your Turn
+  {{else}}
+    Opponents Turn
+  {{/if}}
+</div>
+
 <div id="game-view">
   <div id="render"></div>
 
@@ -8,5 +18,3 @@
   {{/each}}
   </ul>
 </div>
-
-{{log opponent}}

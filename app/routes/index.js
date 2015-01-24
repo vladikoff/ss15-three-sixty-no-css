@@ -65,10 +65,12 @@ export default Ember.Route.extend({
           })
         }
 
-        // Found game, set this user as opponent and start game
+        // Found game, set this user as opponent and their turn then start game
         foundGame.set('opponent', username)
+        foundGame.set('turn', username)
         return foundGame.save().then(() => {
           Ember.Logger.info('Starting a game with: ', foundGame.get('id'))
+          this.controllerFor('game').set('id', foundGame.get('id'))
           this.transitionTo('game')
         })
       })
@@ -84,6 +86,7 @@ export default Ember.Route.extend({
         // You have an opponent now
         if (g.get('opponent') !== '') {
           Ember.Logger.info('Found a game after waiting! Starting game with: ', g.get('opponent'));
+          this.controllerFor('game').set('id', username)
           return this.transitionTo('game')
         }
         // No game found, keep polling
