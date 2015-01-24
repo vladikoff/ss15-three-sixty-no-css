@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import config from '../models/game';
 
 export default Ember.Route.extend({
   actions: {
@@ -32,6 +33,44 @@ export default Ember.Route.extend({
           library.pushObject(Card.create(star))
         });
       })
+    },
+    findMatch: function () {
+      // find all lobbies
+      // join a lobby with 1 player
+      this.store.findAll('game').then((data) => {
+        var foundGame = false;
+        var content = data.get('content');
+        Ember.Logger.info('Available games:');
+        Ember.Logger.info(content);
+
+
+        if (content.length > 0) {
+        // if there is a player to match with
+          content.forEach(function (game) {
+            var op = game.get('opponent');
+
+            Ember.Logger.info(op);
+          });
+        }
+
+        if (!foundGame) {
+          // if no lobbies found then make a new lobby
+          var lobby = this.store.createRecord('game', {
+            id: 'vladikoff',
+            createdAt: new Date(),
+            opponent: 'test'
+          });
+
+          lobby.save();
+          Ember.Logger.info('Created a game');
+        }
+
+
+      });
+
+    },
+    logout: function () {
+      alert('NOT IMPLEMENTED');
     },
   },
 });

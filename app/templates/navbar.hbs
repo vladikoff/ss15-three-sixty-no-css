@@ -1,5 +1,7 @@
 {{#if username}}
   {{username}}
+  <button {{action "findMatch"}}>Find Match</button>
+  <button {{action "logout"}}>Log Out</button>
 {{else}}
   <button {{action "login"}}>LOGIN</button>
 {{/if}}
