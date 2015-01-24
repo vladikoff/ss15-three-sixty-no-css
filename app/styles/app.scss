@@ -6,6 +6,10 @@ html, body {
   margin: 0px;
 }
 
+a {
+  color: #333;
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -27,6 +31,10 @@ html, body {
   border: 5px solid grey;
 }
 
+.cards {
+  margin: 1em 0;
+}
+
 .card {
   list-style: none;
   float: left;
@@ -38,18 +46,32 @@ html, body {
     background-color: #ddd;
     font-size: .8em;
   }
+  .desc {
+    border: 1px solid #333;
+    padding: .6em .4em;
+    margin: .2em 0;
+    background-color: #fff;
+    border-radius: .5em;
+    min-height: 100px;
+    overflow: hidden;
+  }
   .name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: .1em;
   }
   .img {
     border: 1px solid #333;
     padding: .2em;
     margin-bottom: .2em;
+    background-color: #333;
     img {
       width: 100%;
     }
+  }
+  .stats {
+    text-align: right;
   }
   &.selected {
     .inner {

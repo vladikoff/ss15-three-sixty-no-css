@@ -7,8 +7,8 @@ export default Ember.Controller.extend({
     atk: Ember.computed('stargazers_count', function(key, val) {
       return this.get('stargazers_count') || 1
     }),
-    def: Ember.computed('watchers_count', function(key, val) {
-      return this.get('watchers_count') || 1
+    def: Ember.computed('forks_count', function(key, val) {
+      return this.get('forks_count') || 1
     }),
   }),
 
