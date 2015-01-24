@@ -3,7 +3,7 @@ import util from '../helpers/3d/util';
 
 export default Ember.Component.extend({
   tagName: 'li',
-  classNames: ['card'],
+  classNames: ['big-card'],
   classNameBindings: ['selected'],
   data: null,
   selected: false,
