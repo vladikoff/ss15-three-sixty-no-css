@@ -1,6 +1,5 @@
 html, body {
   margin: 0px;
-  font-family: Arial, sans-serif;
 }
 
 .navbar {
@@ -16,4 +15,10 @@ html, body {
     color: #333;
     border: 1px solid #ddd;
   }
+}
+
+#title canvas {
+  display: block;
+  margin: 0 auto;
+  border: 5px solid grey;
 }
