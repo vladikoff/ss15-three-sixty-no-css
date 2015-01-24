@@ -8,5 +8,11 @@ html, body {
 }
 
 .btn-primary {
+  transition: all linear .2s;
   background: #F9904A;
+}
+
+.btn-primary:hover {
+  background-color: #514A45;
+  border-color: rgba(0, 0, 0, 0);
 }
