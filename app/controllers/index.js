@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  needs: ['application'],
   Card: Ember.Object.extend({
     name: '',
     url: '',
@@ -20,4 +21,5 @@ export default Ember.Controller.extend({
 
   // Cards in your deck
   deck: [],
+
 });

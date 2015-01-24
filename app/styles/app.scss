@@ -1,10 +1,12 @@
+@import "bs";
+
 * {
   box-sizing: Border-box;
 }
 
 html, body {
   margin: 0px;
-  background-color: #f9de98;
+  background-color: #397DBE;
   font-family: Arial, sans-serif;
 }
 
@@ -16,26 +18,19 @@ a {
   color: #333;
 }
 
-.navbar {
-  width: 100%;
-  padding: .5em;
-  background-color: #333;
-  color: #ddd;
-  button {
-    background-color: #ddd;
-    color: #333;
-    border: 1px solid #ddd;
-  }
-  a {
-    color: #ddd;
-    text-decoration: none;
-  }
+button {
+  border: 0;
+  background: none;
 }
 
 #title canvas {
   display: block;
   margin: 0 auto;
   border: 5px solid grey;
+}
+
+.navbar {
+margin-bottom: 0;
 }
 
 .cards {

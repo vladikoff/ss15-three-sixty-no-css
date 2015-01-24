@@ -25,7 +25,8 @@ export default Ember.Route.extend({
       var username = this.controllerFor('navbar').get('username')
       var Card = this.controllerFor('index').get('Card')
       var library = this.controllerFor('index').get('library')
-      var deck = this.controllerFor('index').get('deck')
+      var deck = this.controllerFor('index').get('deck') // TODO: MOVE THIS??
+
       this.controllerFor('application').gh('users/' + username + '/starred').then((stars) =>{
         stars.forEach((star) =>{
           star.id = star.full_name;
@@ -37,6 +38,7 @@ export default Ember.Route.extend({
         library.forEach(function (card) {
           if (deck.length < 8) {
             deck.pushObject(card)
+            window.__DECK = deck; // TODO: CRUISE CONTROLLLLL
           }
         });
       })

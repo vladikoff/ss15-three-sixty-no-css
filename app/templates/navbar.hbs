@@ -1,6 +1,14 @@
-{{#if username}}
-  {{username}}
-  <button {{action "logout"}}>Log Out</button>
-{{else}}
-  <button {{action "login"}}>LOGIN</button>
-{{/if}}
+<div class="navbar-header">
+  <a class="navbar-brand" href="#">Heroes Of GitHub</a>
+</div>
+
+<div class="navbar-collapse collapse navbar-inverse-collapse">
+  <ul class="nav navbar-nav">
+    {{#if username}}
+    <li>{{username}}</li>
+    <li><button {{action "logout"}}>Log Out</button></li>
+    {{else}}
+    <li><button {{action "login"}}>LOGIN</button></li>
+    {{/if}}
+  </ul>
+</div>

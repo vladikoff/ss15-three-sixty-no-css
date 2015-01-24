@@ -12,8 +12,6 @@ app.import('vendor/Three.js');
 app.import('vendor/cannon.js');
 app.import('vendor/TrackballControls.js');
 app.import('vendor/Detector.js');
-app.import('vendor/smoothie.js');
-app.import('vendor/bunny.js');
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
