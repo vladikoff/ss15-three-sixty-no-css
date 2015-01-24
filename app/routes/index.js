@@ -80,29 +80,17 @@ export default Ember.Route.extend({
     waitForMatch: function() {
       var username = this.controllerFor('navbar').get('username');
       Ember.Logger.info('Waiting for a game...');
-
-      // Poll for if someone has put you as their opponent
-      this.store.findAll('game').then((data) => {
-         var foundGame = data.get('content').reduce((cur, next) => {
-          if (cur === false) {
-            if (next.get('opponent') === username) return next
-            return false
-          } else {
-            return cur
-          }
-        }, false)
-
-        // found a game!
-        if (foundGame) {
-          Ember.Logger.info('Found a game after waiting! ', foundGame.get('id'));
+      this.store.find('game', username).then((g) => {
+        // You have an opponent now
+        if (g.get('opponent') !== '') {
+          Ember.Logger.info('Found a game after waiting! Starting game with: ', g.get('opponent'));
           return this.transitionTo('game')
         }
-
         // No game found, keep polling
         Ember.run.later(() => {
           this.send('waitForMatch')
         }, 1000)
-      })
+      });
     },
     logout: function () {
       location.reload();
