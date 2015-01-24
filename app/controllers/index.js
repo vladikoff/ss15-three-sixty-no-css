@@ -1,7 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ['application'],
+  needs: ['game'],
+
   Card: Ember.Object.extend({
     name: '',
     url: '',
@@ -20,6 +21,6 @@ export default Ember.Controller.extend({
   library: [],
 
   // Cards in your deck
-  deck: [],
+  deck: Ember.computed.alias('controllers.game.deck'),
 
 });
