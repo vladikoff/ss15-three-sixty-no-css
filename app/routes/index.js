@@ -92,8 +92,5 @@ export default Ember.Route.extend({
         }, 1000)
       });
     },
-    logout: function () {
-      location.reload();
-    },
   },
 });
