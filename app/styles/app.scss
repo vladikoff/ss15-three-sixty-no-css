@@ -7,6 +7,7 @@
 
 html, body {
   margin: 0px;
+  background-color: #397DBE;
   font-family: Arial, sans-serif;
 }
 
@@ -136,5 +137,8 @@ margin-bottom: 0;
     margin-top: -50px;
     z-index: 2;
     position: relative;
+  }
+  #render canvas {
+    border: 2px solid white;
   }
 }
