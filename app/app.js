@@ -1082,11 +1082,17 @@ loadInitializers(App, config.modulePrefix);
     ]);
 
     var stack = Composites.stack(20, 20, 15, 4, 0, 0, function(x, y, column, row) {
+      var src = [
+        'https://avatars2.githubusercontent.com/u/128755?v=3&s=200',
+        'https://avatars3.githubusercontent.com/u/99604?v=3&s=200',
+        'https://avatars3.githubusercontent.com/u/181635?v=3&s=200',
+      ]
+      var img = src[parseInt(Math.random() * src.length) - 1]
       return Bodies.rectangle(x, y, 64, 64, {
         render: {
           strokeStyle: '#ffffff',
           sprite: {
-            texture: 'https://avatars3.githubusercontent.com/u/99604?v=3&s=460'
+            texture: img
           }
         }
       });
