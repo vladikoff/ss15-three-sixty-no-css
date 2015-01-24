@@ -1,6 +1,7 @@
 {{#if username}}
   {{username}}
   <button {{action "findMatch"}}>Find Match</button>
+  {{#link-to "game"}}Play Game{{/link-to}}
   <button {{action "logout"}}>Log Out</button>
 {{else}}
   <button {{action "login"}}>LOGIN</button>
