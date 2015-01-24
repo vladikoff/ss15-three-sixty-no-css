@@ -1,354 +1,204 @@
 import Ember from 'ember';
+import util from '../helpers/3d/util';
 
 export default Ember.View.extend({
-  didInsertElement: function() {
+  didInsertElement: function () {
     this._super()
     console.log('im inside yer game')
 
-
-    var world;
-    var dt = 1 / 60;
-
-    var constraintDown = false;
-    var camera, scene, renderer, gplane=false, clickMarker=false;
-    var geometry, material, mesh;
-    var controls,time = Date.now();
-    var boxShape;
-    var markerMaterial;
-    var jointBody, constrainedBody, mouseConstraint;
-    var SCREEN_WIDTH = 1170, SCREEN_HEIGHT = 600;
-    //var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-    var N = 1;
-
-    var container, camera, scene, renderer, projector;
-
-    // To be synced
-    var meshes=[], bodies=[];
-
-    // Initialize Three.js
-    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-    initCannon();
+    var container, stats, plane;
+    var camera, controls, scene, projector, renderer;
+    var objects = [], plane;
+    var mouse = new THREE.Vector2(),
+      offset = new THREE.Vector3(),
+      INTERSECTED, SELECTED;
     init();
     animate();
-
     function init() {
+      container = document.getElementById('render');
 
-      projector = new THREE.Projector();
-
-      container = document.getElementById( 'render' );
-
-
-      // scene
+      camera = new THREE.PerspectiveCamera(70, 16 / 10 , 1, 10000);
+      camera.position.z = 50;
+      camera.position.y = 50;
+      window.CAMERA = camera;
+      controls = new THREE.TrackballControls(camera);
+      controls.rotateSpeed = 1.0;
+      controls.zoomSpeed = 1.2;
+      controls.panSpeed = 0.8;
+      controls.noZoom = false;
+      controls.noPan = false;
+      controls.staticMoving = true;
+      controls.dynamicDampingFactor = 0.3;
       scene = new THREE.Scene();
-      scene.fog = new THREE.Fog( 0x000000, 500, 10000 );
-
-      // camera
-      camera = new THREE.PerspectiveCamera( 45, SCREEN_WIDTH / SCREEN_HEIGHT, 0.5, 10000 );
-      window.CAMERA = camera
-      window.SCENE = scene
-      camera.position.set(24, 15, 0);
-      //camera.quaternion.setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
-      //camera.lookAt(scene.position);
-      scene.add(camera);
-
-      // lights
-      var light, materials;
-      scene.add( new THREE.AmbientLight( 0x666666 ) );
-
-      light = new THREE.DirectionalLight( 0xffffff, 1.75 );
-      var d = 20;
-
-      light.position.set( d, d, d );
-
+      scene.add(new THREE.AmbientLight(0x505050));
+      window.SCENE = scene;
+      var light = new THREE.SpotLight(0xffffff, 1.5);
+      light.position.set(0, 500, 2000);
       light.castShadow = true;
-      //light.shadowCameraVisible = true;
-
-      light.shadowMapWidth = 1024;
-      light.shadowMapHeight = 1024;
-
-      light.shadowCameraLeft = -d;
-      light.shadowCameraRight = d;
-      light.shadowCameraTop = d;
-      light.shadowCameraBottom = -d;
-
-      light.shadowCameraFar = 3*d;
-      light.shadowCameraNear = d;
+      light.shadowCameraNear = 200;
+      light.shadowCameraFar = camera.far;
+      light.shadowCameraFov = 50;
+      light.shadowBias = -0.00022;
       light.shadowDarkness = 0.5;
+      light.shadowMapWidth = 2048;
+      light.shadowMapHeight = 2048;
+      scene.add(light);
 
-      scene.add( light );
+      // FLOOR
+      var floorTexture = new THREE.ImageUtils.loadTexture('checkerboard.jpg');
+      floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+      floorTexture.repeat.set( 10, 10 );
+      var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+      var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+      var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.position.y = -0.5;
+      floor.rotation.x = Math.PI / 2;
+      scene.add(floor);
+/*
+      var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+      for (var i = 0; i < 200; i++) {
+        var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff}));
+        object.material.ambient = object.material.color;
+        object.position.x = i * 20;
+
+        object.scale.x = Math.random() * 2 + 1;
+        object.scale.y = Math.random() * 2 + 1;
+        object.scale.z = Math.random() * 2 + 1;
+        object.castShadow = true;
+        object.receiveShadow = true;
+        scene.add(object);
+        objects.push(object);
+      }*/
 
 
-      // floor
-      geometry = new THREE.PlaneGeometry( 100, 100, 1, 1 );
-      //geometry.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2 ) );
-      material = new THREE.MeshLambertMaterial( { color: 0x777777 } );
-      markerMaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
-      //THREE.ColorUtils.adjustHSV( material.color, 0, 0, 0.9 );
-      mesh = new THREE.Mesh( geometry, material );
-      mesh.castShadow = true;
-      mesh.quaternion.setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI / 2);
-      mesh.receiveShadow = true;
-      scene.add(mesh);
+      //camera.lookAt(mesh.position);
 
-      // cubes
-      var cubeGeo = new THREE.BoxGeometry( 1, 1, 1, 10, 10 );
-      var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0x888888 } );
-      for(var i=0; i<N; i++){
-        var cubeMesh = new THREE.Mesh(cubeGeo, cubeMaterial);
-        console.log(cubeMesh.position)
-        cubeMesh.castShadow = true;
-        meshes.push(cubeMesh);
-        scene.add(cubeMesh);
-        camera.lookAt(cubeMesh.position);
-      }
-      getAvatar();
-
-      renderer = new THREE.WebGLRenderer( { antialias: true } );
-      renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-      renderer.setClearColor( scene.fog.color );
-
-      container.appendChild( renderer.domElement );
-
-      renderer.gammaInput = true;
-      renderer.gammaOutput = true;
+      plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        opacity: 0.25,
+        transparent: true,
+        wireframe: true
+      }));
+      plane.visible = false;
+      scene.add(plane);
+      projector = new THREE.Projector();
+      renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setClearColor(0xf0f0f0);
+      renderer.setSize(1170, 600);
+      renderer.sortObjects = false;
       renderer.shadowMapEnabled = true;
+      renderer.shadowMapType = THREE.PCFShadowMap;
+      container.appendChild(renderer.domElement);
 
-      //window.addEventListener( 'resize', onWindowResize, false );
+      getAvatar();
+      util.createPlanes(scene);
 
-      window.addEventListener("mousemove", onMouseMove, false );
-      window.addEventListener("mousedown", onMouseDown, false );
-      window.addEventListener("mouseup", onMouseUp, false );
-    }
+      function getAvatar() {
+        var image = new Image();
+        image.crossOrigin = "Anonymous";
 
-    function setClickMarker(x,y,z) {
-      if(!clickMarker){
-        var shape = new THREE.SphereGeometry(0.2, 8, 8);
-        clickMarker = new THREE.Mesh(shape, markerMaterial);
-        scene.add(clickMarker);
+        image.addEventListener('load', function () {
+          console.log('loaded img');
+          var texture = new THREE.Texture(image);
+          texture.needsUpdate = true;
+          var geometry = new THREE.BoxGeometry( 20, 20, 0.1 );
+          var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+          mesh.rotation.y = Math.PI;
+          mesh.position.x = 0;
+          mesh.position.y = 10;
+          mesh.position.z = -100;
+          window.SCENE.add(mesh);
+        }, false);
+
+        image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
+
       }
-      clickMarker.visible = true;
-      clickMarker.position.set(x,y,z);
+
+
+
+      renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
+      renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+      renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+      //
     }
 
-    function removeClickMarker(){
-      //clickMarker.visible = false;
+    function cursorPositionInCanvas(canvas, event) {
+      var x, y;
+
+      var canoffset = $('canvas').offset();
+      x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - Math.floor(canoffset.left);
+      y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop - Math.floor(canoffset.top) + 1;
+
+      return [x,y];
     }
 
-    function onMouseMove(e){
-      var entity = findNearestIntersectingObject(e.clientX,e.clientY,camera,meshes);
-      console.log(entity);
-      
-      // Move and project on the plane
-      if (gplane && mouseConstraint) {
-        var pos = projectOntoPlane(e.clientX,e.clientY,gplane,camera);
-        if(pos){
-          setClickMarker(pos.x,pos.y,pos.z,scene);
-          moveJointToPoint(pos.x,pos.y,pos.z);
+    function onDocumentMouseMove(event) {
+      event.preventDefault();
+
+      mouse.x = ((cursorPositionInCanvas( renderer.domElement, event )[0]) / $('canvas').width()) * 2 - 1;
+      mouse.y = ( - (cursorPositionInCanvas( renderer.domElement, event )[1])/ $('canvas').height()) * 2 + 1;
+
+      //
+      var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+      projector.unprojectVector(vector, camera);
+      var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      if (SELECTED) {
+        var intersects = raycaster.intersectObject(plane);
+        SELECTED.position.copy(intersects[0].point.sub(offset));
+        return;
+      }
+      var intersects = raycaster.intersectObjects(objects);
+      if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+          if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+          INTERSECTED = intersects[0].object;
+          INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+          plane.position.copy(INTERSECTED.position);
+          plane.lookAt(camera.position);
         }
+        container.style.cursor = 'pointer';
+      } else {
+        if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+        INTERSECTED = null;
+        container.style.cursor = 'auto';
       }
     }
 
-    function onMouseDown(e){
-      // Find mesh from a ray
-      var entity = findNearestIntersectingObject(e.clientX,e.clientY,camera,meshes);
-      var pos = entity.point;
-      if(pos && entity.object.geometry instanceof THREE.BoxGeometry){
-        constraintDown = true;
-        // Set marker on contact point
-        setClickMarker(pos.x,pos.y,pos.z,scene);
-
-        // Set the movement plane
-        setScreenPerpCenter(pos,camera);
-
-        var idx = meshes.indexOf(entity.object);
-        if(idx !== -1){
-          addMouseConstraint(pos.x,pos.y,pos.z,bodies[idx]);
-        }
+    function onDocumentMouseDown(event) {
+      controls.enabled = true;
+      event.preventDefault();
+      var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+      projector.unprojectVector(vector, camera);
+      var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      var intersects = raycaster.intersectObjects(objects);
+      if (intersects.length > 0) {
+        controls.enabled = false;
+        SELECTED = intersects[0].object;
+        var intersects = raycaster.intersectObject(plane);
+        offset.copy(intersects[0].point).sub(plane.position);
+        container.style.cursor = 'move';
       }
     }
 
-    // This function creates a virtual movement plane for the mouseJoint to move in
-    function setScreenPerpCenter(point, camera) {
-      // If it does not exist, create a new one
-      if(!gplane) {
-        var planeGeo = new THREE.PlaneGeometry(100,100);
-        var plane = gplane = new THREE.Mesh(planeGeo,material);
-        plane.visible = false; // Hide it..
-        scene.add(gplane);
+    function onDocumentMouseUp(event) {
+      event.preventDefault();
+      controls.enabled = true;
+      if (INTERSECTED) {
+        plane.position.copy(INTERSECTED.position);
+        SELECTED = null;
       }
-
-      // Center at mouse position
-      gplane.position.copy(point);
-
-      // Make it face toward the camera
-      gplane.quaternion.copy(camera.quaternion);
+      container.style.cursor = 'auto';
     }
 
-    function onMouseUp(e) {
-      constraintDown = false;
-      // remove the marker
-      removeClickMarker();
-
-      // Send the remove mouse joint to server
-      removeJointConstraint();
-    }
-
-    var lastx,lasty,last;
-    function projectOntoPlane(screenX,screenY,thePlane,camera) {
-      var x = screenX;
-      var y = screenY;
-      var now = new Date().getTime();
-      // project mouse to that plane
-      var hit = findNearestIntersectingObject(screenX,screenY,camera,[thePlane]);
-      lastx = x;
-      lasty = y;
-      last = now;
-      if(hit)
-        return hit.point;
-      return false;
-    }
-    function findNearestIntersectingObject(clientX,clientY,camera,objects) {
-      // Get the picking ray from the point
-      var raycaster = getRayCasterFromScreenCoord(clientX, clientY, camera, projector);
-
-      // Find the closest intersecting object
-      // Now, cast the ray all render objects in the scene to see if they collide. Take the closest one.
-      var hits = raycaster.intersectObjects(objects);
-      var closest = false;
-      if (hits.length > 0) {
-        closest = hits[0];
-      }
-
-      return closest;
-    }
-
-    function getAvatar() {
-      var image = new Image();
-      image.crossOrigin = "Anonymous";
-
-      image.addEventListener('load', function () {
-        console.log('loaded img');
-        var texture = new THREE.Texture(image);
-        texture.needsUpdate = true;
-        var geometry = new THREE.BoxGeometry( 1, 1, 1, 10, 10 );
-        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
-        mesh.rotation.y = Math.PI;
-        mesh.position.x = -0.5;
-        mesh.position.y = 2;
-        window.SCENE.add(mesh);
-      }, false);
-
-      image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
-
-    }
-
-    // Function that returns a raycaster to use to find intersecting objects
-    // in a scene given screen pos and a camera, and a projector
-    function getRayCasterFromScreenCoord (screenX, screenY, camera, projector) {
-      var mouse3D = new THREE.Vector3();
-      // Get 3D point form the client x y
-      mouse3D.x = (screenX / window.innerWidth) * 2 - 1;
-      mouse3D.y = -(screenY / window.innerHeight) * 2 + 1;
-      mouse3D.z = 0.5;
-      return projector.pickingRay(mouse3D, camera);
-    }
-
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      //controls.handleResize();
-      renderer.setSize( window.innerWidth, window.innerHeight );
-    }
-
+//
     function animate() {
-      requestAnimationFrame( animate );
-      //controls.update();
-      updatePhysics();
+      requestAnimationFrame(animate);
       render();
     }
 
-    function updatePhysics(){
-      world.step(dt);
-      for(var i=0; i !== meshes.length; i++){
-        meshes[i].position.copy(bodies[i].position);
-        meshes[i].quaternion.copy(bodies[i].quaternion);
-      }
-    }
-
     function render() {
+      controls.update();
       renderer.render(scene, camera);
-    }
-
-    function initCannon(){
-      // Setup our world
-      world = new CANNON.World();
-      world.quatNormalizeSkip = 0;
-      world.quatNormalizeFast = false;
-
-      world.gravity.set(0,-10,0);
-      world.broadphase = new CANNON.NaiveBroadphase();
-
-      // Create boxes
-      var mass = 5, radius = 1.3;
-      var boxShape = new CANNON.Box(new CANNON.Vec3(0.5,0.5,0.5));
-      for(var i=0; i<N; i++){
-        var boxBody = new CANNON.Body({ mass: mass });
-        boxBody.addShape(boxShape);
-        boxBody.position.set(0,5,0);
-        world.add(boxBody);
-        bodies.push(boxBody);
-      }
-
-      // Create a plane
-      var groundShape = new CANNON.Plane();
-      var groundBody = new CANNON.Body({ mass: 0 });
-      groundBody.addShape(groundShape);
-      groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-      world.add(groundBody);
-
-      // Joint body
-      var shape = new CANNON.Sphere(0.1);
-      jointBody = new CANNON.Body({ mass: 0 });
-      jointBody.addShape(shape);
-      jointBody.collisionFilterGroup = 0;
-      jointBody.collisionFilterMask = 0;
-      world.add(jointBody)
-    }
-
-    function addMouseConstraint(x,y,z,body) {
-      // The cannon body constrained by the mouse joint
-      constrainedBody = body;
-
-      // Vector to the clicked point, relative to the body
-      var v1 = new CANNON.Vec3(x,y,z).vsub(constrainedBody.position);
-
-      // Apply anti-quaternion to vector to tranform it into the local body coordinate system
-      var antiRot = constrainedBody.quaternion.inverse();
-      var pivot = antiRot.vmult(v1); // pivot is not in local body coordinates
-
-      // Move the cannon click marker particle to the click position
-      jointBody.position.set(x,y,z);
-
-      // Create a new constraint
-      // The pivot for the jointBody is zero
-      mouseConstraint = new CANNON.PointToPointConstraint(constrainedBody, pivot, jointBody, new CANNON.Vec3(0,0,0));
-
-      // Add the constriant to world
-      world.addConstraint(mouseConstraint);
-    }
-
-    // This functions moves the transparent joint body to a new postion in space
-    function moveJointToPoint(x,y,z) {
-      // Move the joint body to a new position
-      jointBody.position.set(x,y,z);
-      mouseConstraint.update();
-    }
-
-    function removeJointConstraint(){
-      // Remove constriant from world
-      world.removeConstraint(mouseConstraint);
-      mouseConstraint = false;
     }
 
 
