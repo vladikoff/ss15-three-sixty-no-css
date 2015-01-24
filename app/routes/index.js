@@ -77,7 +77,7 @@ export default Ember.Route.extend({
 */
     },
     logout: function () {
-      alert('NOT IMPLEMENTED');
+      location.reload();
     },
   },
 });
