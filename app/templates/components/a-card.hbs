@@ -4,6 +4,10 @@
     <div class="owner">{{data.owner.login}}</div>
     <div class="type">{{data.language}}</div>
     <div class="desc">{{data.description}}</div>
-    <div class="stats">{{data.atk}} / {{data.def}}</div>
+    <div class="stats">
+      <div class="stats-atk">{{data.atk}} <span>HIT</span></div>
+      <div class="stats-mana">{{data.mana}} <span>MANA</span></div>
+      <div class="stats-def">{{data.def}} <span>HP</span></div>
+    </div>
   </div>
   {{log data}}
