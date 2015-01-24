@@ -3,8 +3,11 @@
 <button style="position: absolute; right: 0; top: 0" {{action "findMatch"}}>##DEBUG_BUTTON Start a Game</button>
 
 {{#if deck}}
+  <div class="well find-game-well">
+  <button class="btn btn-primary btn-lg btn-block" {{action "findMatch"}}>Find a Game</button>
+  </div>
 
-  <h2>Your Card Deck</h2>
+  <h1>Current Card Deck</h1>
   <ul class="cards">
     {{#each card in deck}}
       {{a-card data=card}}
@@ -19,7 +22,6 @@
   </ul>
 
 {{else}}
-
 
   <div class="jumbotron">
     <h1>Heroes of GitHub</h1>
