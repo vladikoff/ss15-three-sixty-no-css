@@ -4,14 +4,14 @@
   <div class="clock">{{clock}}s</div>
   <div class="turn">
     {{#if turn}}
-      {{id}}'s turn
+      {{id}}'s turn <button {{action "endTurn"}}>End Turn</button>
     {{else}}
       {{opponent}}'s turn
     {{/if}}
     {{#if opponentProbablyLeft}}
       Your opponent has probably left :(
     {{/if}}
-</div>
+  </div>
 
   <div id="render"></div>
 

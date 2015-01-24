@@ -70,17 +70,19 @@ export default Ember.Route.extend({
         }, interval)
       })
     },
-  },
 
-  // Manually end your turn
-  endTurn: function() {
-    store.find('game', gameCtrl.get('id')).then((game) => {
-      var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
-      game.set('lastTurnSwitch', moment().utc())
-      game.set('turn', opponent)
-      return game.save()
-    }).then(() => {
-      this.controllerFor('game').set('turn', false)
-    })
-  },
+    // Manually end your turn
+    endTurn: function() {
+      var username = this.controllerFor('navbar').get('username');
+      this.store.find('game', this.controllerFor('game').get('id')).then((game) => {
+        var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
+        game.set('lastTurnSwitch', moment().utc())
+        game.set('turn', opponent)
+        return game.save()
+      }).then(() => {
+        this.controllerFor('game').set('turn', false)
+      })
+    },
+
+  }
 });

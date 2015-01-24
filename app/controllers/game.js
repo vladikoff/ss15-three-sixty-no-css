@@ -18,10 +18,4 @@ export default Ember.Controller.extend({
   // Whose turn is it?
   // false = Not yours, true = your turn
   turn: false,
-
-  // Example on how to know when turns have switched
-  onTurnSwitch: Ember.observer('turn', function() {
-    var myTurn = this.get('turn')
-    //Ember.Logger.info('It is ' + myTurn + ' your turn')
-  })
 });
