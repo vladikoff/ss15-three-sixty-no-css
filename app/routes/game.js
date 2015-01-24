@@ -38,6 +38,8 @@ export default Ember.Route.extend({
         var delta = moment().utc() - game.get('lastTurnSwitch')
         //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
+        gameCtrl.set('opponent', opponent)
+
         // Is it our turn?
         if (game.get('turn') === username) {
           // Has our time expired?

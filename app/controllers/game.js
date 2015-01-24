@@ -4,6 +4,9 @@ export default Ember.Controller.extend({
   // id of the game we are playing
   id: null,
 
+  // name of your opponent
+  opponent: null,
+
   deck: null,
 
   // How many seconds until this turn ends
