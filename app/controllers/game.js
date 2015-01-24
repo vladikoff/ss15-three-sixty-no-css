@@ -7,6 +7,9 @@ export default Ember.Controller.extend({
   // name of your opponent
   opponent: null,
 
+  // Did the opponent probably leave?
+  opponentProbablyLeft: false,
+
   deck: null,
 
   // How many seconds until this turn ends

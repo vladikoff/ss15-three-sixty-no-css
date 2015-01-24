@@ -25,7 +25,7 @@ export default Ember.Route.extend({
     // THE MAIN GAME TICK
     tick: function() {
       var interval = 1000
-      var clockMax = 30 * 1000 // in intervals
+      var clockMax = 30 * 1000 // in seconds
 
       var promises = [];
       var gameCtrl = this.controllerFor('game');
@@ -49,8 +49,12 @@ export default Ember.Route.extend({
             game.set('turn', opponent)
           }
           gameCtrl.set('turn', true)
+          gameCtrl.set('opponentProbablyLeft', false)
         } else {
-          // TODO: Set clock decrement
+          // Has the other user's time expired?
+          if (delta >= clockMax) {
+            gameCtrl.set('opponentProbablyLeft', true)
+          }
           gameCtrl.set('turn', false)
         }
 
