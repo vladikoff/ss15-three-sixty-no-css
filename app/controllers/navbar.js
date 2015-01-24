@@ -1,5 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  username: null,
+  user: null,
+  username: Ember.computed('user.login', function() {
+    return this.get('user.login')
+  }),
 });
