@@ -10,6 +10,9 @@ export default Ember.Controller.extend({
     def: Ember.computed('forks_count', function(key, val) {
       return this.get('forks_count') || 1
     }),
+    language: Ember.computed(function(key, val) {
+      return val || '????';
+    }),
   }),
 
   // All the cards you have available
