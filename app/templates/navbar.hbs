@@ -5,6 +5,7 @@
 
   <ul class="nav navbar-nav">
     {{#if username}}
+    <li class="avatar">{{avatar}}</li>
     <li class="username">{{username}}</li>
     <li><button {{action "logout"}}>Log Out</button></li>
     {{/if}}
