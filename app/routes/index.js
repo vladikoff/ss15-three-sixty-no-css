@@ -53,13 +53,7 @@ export default Ember.Route.extend({
       game.save().then(() => {
         return this.store.findAll('game')
       }).then((data) => {
-        var foundGame = false;
-        var content = data.get('content');
-
-        Ember.Logger.info('Available games:');
-        Ember.Logger.info(content);
-
-        var foundGame = content.reduce((cur, next) => {
+        var foundGame = data.get('content').reduce((cur, next) => {
           if (cur === false) {
             // Cant play against yourself
             if (username === next.get('id')) return false
