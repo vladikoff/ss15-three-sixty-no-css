@@ -2,11 +2,18 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-var app = new EmberApp();
+var app = new EmberApp({
+  hinting: false
+});
 app.import('bower_components/band.js/dist/band.js');
 app.import('bower_components/firebase/firebase.js');
 app.import('bower_components/emberfire/dist/emberfire.js');
-app.import('vendor/matter.js');
+app.import('vendor/Three.js');
+app.import('vendor/cannon.js');
+app.import('vendor/TrackballControls.js');
+app.import('vendor/Detector.js');
+app.import('vendor/smoothie.js');
+app.import('vendor/bunny.js');
 
 // Use `app.import` to add additional libraries to the generated
 // output files.

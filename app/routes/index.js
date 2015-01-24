@@ -42,9 +42,10 @@ export default Ember.Route.extend({
       })
     },
     findMatch: function () {
+      this.transitionTo('game');
       // find all lobbies
       // join a lobby with 1 player
-      this.store.findAll('game').then((data) => {
+      /*this.store.findAll('game').then((data) => {
         var foundGame = false;
         var content = data.get('content');
         Ember.Logger.info('Available games:');
@@ -74,7 +75,7 @@ export default Ember.Route.extend({
 
 
       });
-
+*/
     },
     logout: function () {
       alert('NOT IMPLEMENTED');
