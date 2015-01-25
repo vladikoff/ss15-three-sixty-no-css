@@ -29,9 +29,9 @@ export default Ember.Controller.extend({
   opponentAvatarUrl: null,
 
   // Whether this player is the opponent or not
-  isOpponent: Ember.computed('opponent', 'username', function() {
-    Ember.Logger.info('wtf is this? ', this.get('opponent'), this.get('username'))
-    return !!(this.get('opponent') === this.get('username'))
+  isOpponent: Ember.computed('id', 'username', function() {
+    Ember.Logger.info('wtf is this? ', this.get('id'), this.get('username'))
+    return !!(this.get('id') === this.get('username'))
   }),
 
   // Did the opponent probably leave?
