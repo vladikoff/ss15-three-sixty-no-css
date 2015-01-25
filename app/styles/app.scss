@@ -36,6 +36,7 @@ h2 {
   border-radius: 5px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  font-size: 1.5em;
 }
 
 a {
@@ -60,6 +61,10 @@ button {
 
 .find-game-well {
   margin-top: 20px;
+  padding: .5em;
+  .btn {
+    font-size: 1.75em;
+  }
 }
 
 #game-view {
