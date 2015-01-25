@@ -142,8 +142,13 @@ export default Ember.Route.extend({
     selectCard: function(card) {
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
+
+      console.log(this.card, card);
+
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return
+
+      gameCtrl.get('deck').removeObject(card);
 
       SOUNDTRACK.select();
       Ember.Logger.info('selectCard');

@@ -74,7 +74,7 @@ export default Ember.Controller.extend({
 
     if (shouldCache && sessionStorage[api]) {
       return new Promise(function(resolve) {
-        resolve(JSON.parse(sessionStorage[api]));
+        resolve(JSON.parse(sessionStorage[api]).slice(0, 200));
       });
     }
 
