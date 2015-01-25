@@ -249,17 +249,19 @@ export default Ember.View.extend({
             util.cardAttackSelectionMode(spot);
             util.makeAllOppositeCardsAttackable();
           } else {
+            Ember.Logger.info('// ELSE I clicked on a card on the other side');
             // ELSE I clicked on a card on the other side
 
             // IF I Have a card Selected, then I can choose a card to attack
             if (window.__SELECTED_CARD) {
-            /// Logic:
+              /// Logic:
 
-            if (spot === 'opponentBase') {
-              self.get('controller').send('attackBase')
-            }
+              if (spot === 'opponentBase') {
+                Ember.Logger.info('spot is opponentBase');
+                self.get('controller').send('attackBase')
+              }
 
-            /// Animations
+              /// Animations
               util.attackCard(window.__SELECTED_CARD, spot);
 
               util.cardSetHp(spot, 0);

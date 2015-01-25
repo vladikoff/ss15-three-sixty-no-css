@@ -66,16 +66,13 @@ export default Ember.Route.extend({
         // Find open games
         var content = data.get('content')
 
-        // if (content.length === 1) {
-        //   throw new Error('There is only 1 game! Fire!')
-        // }
-
         var foundGame = content.reduce((cur, next) => {
+          Ember.Logger.info('Reducing with:', next.get('opponent'), username);
           if (cur === false) {
             // Cant play against yourself
             if (username === next.get('id')) return false
             // If player is already player but not yourself
-            if (next.get('opponent') !== '' && next.get('opponent') !== username) return false
+            if (next.get('opponent') !== '' && next.get('opponent') === username) return false
             return next
           } else {
             return cur
@@ -106,7 +103,7 @@ export default Ember.Route.extend({
     },
     waitForMatch: function() {
       var username = this.controllerFor('navbar').get('username');
-      Ember.Logger.info('Waiting for a game...');
+      Ember.Logger.info('Waiting for a game... with username: ', username);
       this.store.find('game', username).then((g) => {
         // You have an opponent now
         if (g.get('opponent') !== '') {
