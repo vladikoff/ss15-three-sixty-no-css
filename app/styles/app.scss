@@ -136,6 +136,7 @@ border-bottom: 2px solid white;
 }
 
 #game-view {
+  position: relative;
   .cards {
     margin-top: -50px;
     z-index: 2;
@@ -158,5 +159,10 @@ border-bottom: 2px solid white;
     margin-left: 1em;
     width: 300px;
     float: left;
+  }
+  .game-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }
