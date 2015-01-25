@@ -100,8 +100,14 @@ export default Ember.Route.extend({
       })
     },
 
-    setBoardPosition: function(pos) {
-      console.log('SET BOARD', pos)
+    // Call to set a specific board position
+    setBoard: function(pos, card) {
+      var gameCtrl = this.controllerFor('game')
+      gameCtrl.set(pos, card)
+      this.store.find('game', gameCtrl.get('id')).then((game) => {
+        game.set(pos, card)
+        return game.save()
+      })
     },
 
   }

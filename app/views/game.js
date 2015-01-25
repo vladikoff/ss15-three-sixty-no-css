@@ -219,6 +219,10 @@ export default Ember.View.extend({
       projector.unprojectVector(vector, camera);
       var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
       var intersects = raycaster.intersectObjects(scene._clickable_objects);
+
+      // Set a board position and have it sync
+      self.get('controller').send('setBoard', 'boardOpponentL1', 'neoziro/grunt-shipit')
+
       if (intersects.length > 0) {
         //controls.enabled = false;
         SELECTED = intersects[0].object;
