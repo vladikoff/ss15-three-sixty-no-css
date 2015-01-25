@@ -11,7 +11,6 @@
 
 html, body {
   margin: 0px;
-  font-family: Arial, sans-serif;
 }
 
 h2 {
@@ -35,6 +34,7 @@ button {
 
 .navbar {
 margin-bottom: 0;
+border-bottom: 2px solid white;
 }
 
 .cards {
@@ -142,7 +142,6 @@ margin-bottom: 0;
     position: relative;
   }
   #render canvas {
-    border: 2px solid white;
   }
   .clock {
     font-size: 1em;

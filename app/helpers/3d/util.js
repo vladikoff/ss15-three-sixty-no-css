@@ -177,8 +177,8 @@ export default {
       var destination = window.POSITIONS['board' + owner + position];
       destination.data = data;
 
-      var geometry = new THREE.BoxGeometry(5, 5, 5);
-      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xD25025}));
+      var geometry = new THREE.BoxGeometry(5, 10, 0.1);
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
       object.position.x = destination.x;
       object.position.y = 10;
       object.position.z = destination.z;
