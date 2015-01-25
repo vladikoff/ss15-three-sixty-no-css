@@ -10,14 +10,21 @@ export default Ember.Route.extend({
     }
   },
 
-  model: function() {
-    console.log(this.username);
-
-    // Get game state and setup controller for it
+  // When opponent has changed, update avatar url
+  _getOpponentAvatar: function() {
+    var gameCtrl = this.controllerFor('game')
+    var opponent = gameCtrl.get('opponent')
+    this.controllerFor('application').gh('users/' + opponent).then((user) => {
+      gameCtrl.set('opponentAvatarUrl', user.avatar_url)
+    })
   },
 
   actions: {
     didTransition: function() {
+      // Observe opponent
+      var gameCtrl = this.controllerFor('game')
+      Ember.addObserver(gameCtrl, 'opponent', this, this._getOpponentAvatar)
+
       // Start up the tick
       this.controllerFor('index').set('waitingForGame', false)
       this.send('tick')

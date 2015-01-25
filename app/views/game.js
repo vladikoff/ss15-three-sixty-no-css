@@ -1,16 +1,40 @@
 import Ember from 'ember';
 import util from '../helpers/3d/util';
-import GHMixin from '../mixins/gh';
 
-export default Ember.View.extend(GHMixin, {
+export default Ember.View.extend({
   // Example on how to know when the turn has changed here in the view
   onTurnChange: Ember.observer('controller.turn', function() {
     var myTurn = this.get('controller.turn')
     Ember.Logger.info('It is ' + myTurn + ' your turn')
   }),
 
-  didInsertElement: function () {
+  didInsertElement: function() {
     this._super()
+    this.init3d()
+  },
+
+  // When the opponent avatar changes
+  onOpponentAvatar: Ember.observer('controller.opponentAvatarUrl', function() {
+    var src = this.get('controller.opponentAvatarUrl')
+    if (!src) return
+    var image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.addEventListener('load', () => {
+      console.log('loaded img');
+      var texture = new THREE.Texture(image);
+      texture.needsUpdate = true;
+      var geometry = new THREE.BoxGeometry(30, 30, 0.1);
+      var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+      mesh.rotation.y = Math.PI;
+      mesh.position.x = 0;
+      mesh.position.y = 15;
+      mesh.position.z = -80;
+      this.get('scene').add(mesh);
+    }, false);
+    image.src = src
+  }),
+
+  init3d: function () {
     var self = this;
 
     var container, stats, plane;
@@ -76,13 +100,12 @@ export default Ember.View.extend(GHMixin, {
         objects.push(object);
 
       }
-      var controller = self.get('controller');
-      var navbar = controller.controllerFor('navbar');
-      var gameCtrl = controller.controllerFor('game');
-      var app = controller.controllerFor('application');
+      // var controller = self.get('controller');
+      // var navbar = controller.controllerFor('navbar');
+      // var gameCtrl = controller.controllerFor('game');
+      // var app = controller.controllerFor('application');
 
-      util.controller = self.get('controller')
-      util.getAvatar(app, navbar, gameCtrl);
+      //util.controller = self.get('controller')
       util.createPlanes(scene, objects);
       util.createCardSpots(scene);
 
@@ -120,7 +143,9 @@ export default Ember.View.extend(GHMixin, {
       renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
       renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
       renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
-      //
+
+      // set properties to make them available on this view
+      self.setProperties({ container, camera, scene, renderer, mouse, projector })
     }
 
     function cursorPositionInCanvas(canvas, event) {
@@ -207,7 +232,5 @@ export default Ember.View.extend(GHMixin, {
       //controls.update();
       renderer.render(scene, camera);
     }
-
-
-  }
+  },
 });

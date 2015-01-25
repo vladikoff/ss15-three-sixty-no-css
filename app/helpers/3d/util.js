@@ -61,35 +61,6 @@ export default {
 
   },
 
-  getAvatar: function (app, navbar, game) {
-    var image = new Image();
-    image.crossOrigin = "Anonymous";
-
-    image.addEventListener('load', function () {
-      console.log('loaded img');
-      var texture = new THREE.Texture(image);
-      texture.needsUpdate = true;
-      var geometry = new THREE.BoxGeometry(30, 30, 0.1);
-      var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
-      mesh.rotation.y = Math.PI;
-      mesh.position.x = 0;
-      mesh.position.y = 15;
-      mesh.position.z = -80;
-      window.SCENE.add(mesh);
-    }, false);
-
-
-    window.GAME = game;
-    // var username = navbar.get('username');
-    // if (username === game.get('id')) {
-    //   username = game.get('opponent');
-    // }
-
-    this.controller.gh('users/' + this.controller.get('opponent')).then((user) => {
-      image.src = user.avatar_url;
-    });
-  },
-
   createCardSpots: function (scene) {
     window.POSITIONS = {
       boardCreatorL1:

@@ -1,12 +1,12 @@
 import Ember from 'ember';
-import GHMixin from '../mixins/gh';
 
-export default Ember.Controller.extend(GHMixin, {
+export default Ember.Controller.extend({
   // id of the game we are playing
   id: null,
 
   // name of your opponent
   opponent: null,
+  opponentAvatarUrl: null,
 
   // Did the opponent probably leave?
   opponentProbablyLeft: false,
