@@ -6,6 +6,9 @@
 
 .user:hover {
   background: #333;
+  &:after {
+    content: "logout";
+  }
 }
 
 li {
