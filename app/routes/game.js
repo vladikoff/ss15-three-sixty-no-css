@@ -109,9 +109,9 @@ export default Ember.Route.extend({
       Ember.Logger.info('Save card to ctrl/db: ', pos, card)
       var gameCtrl = this.controllerFor('game')
       var id = gameCtrl.get('id')
-      gameCtrl.set(pos, card)
       if (id) {
         this.store.find('game', id).then((game) => {
+          gameCtrl.set(pos, card)
           game.set(pos, card)
           return game.save()
         })
