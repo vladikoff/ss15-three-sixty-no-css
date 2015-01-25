@@ -36,14 +36,14 @@ export default Ember.View.extend({
   }),
   onBoardChange: function(controller, key) {
     if (!this.get('scene')) return
-    var isOpponent = this.get('controller.isOpponent')
-    if (isOpponent) {
-      if (key.indexOf('Creator') != -1) {
-        key = key.replace('Creator', 'Opponent')
-      } else if (key.indexOf('Opponent') != -1) {
-        key = key.replace('Opponent', 'Creator')
-      }
-    }
+    // var isOpponent = this.get('controller.isOpponent')
+    // if (isOpponent) {
+    //   if (key.indexOf('Creator') != -1) {
+    //     key = key.replace('Creator', 'Opponent')
+    //   } else if (key.indexOf('Opponent') != -1) {
+    //     key = key.replace('Opponent', 'Creator')
+    //   }
+    // }
 
     var cardId = this.get('controller.' + key)
     var position = key.replace('board', '')
