@@ -58,7 +58,11 @@ export default Ember.Controller.extend({
       this.set('current', data);
     },
 
-    addToDeck: function(data) {
+    addToDeck: function(data, maxLength) {
+      if (this.get('deck').length >= maxLength) {
+        return alert('A deck is 5 cards, please remove one first');
+      }
+
       this.get('deck').pushObject(data);
       this.get('library').removeObject(data);
 

@@ -4,6 +4,9 @@ export default Ember.Component.extend({
   tagName: 'div',
   classNames: ['cards', 'deck-list'],
   data: null,
+
+  maxCards: 5,
+
   wrapSortable: function() {
     Sortable.create(this.element.querySelector('ul'));
   }.on('didInsertElement'),
@@ -14,7 +17,7 @@ export default Ember.Component.extend({
     },
 
     addToDeck: function(data) {
-      this.sendAction('addToDeck', data);
+      this.sendAction('addToDeck', data, this.get('maxCards'));
     },
 
     removeFromDeck: function(data) {
