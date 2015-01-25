@@ -32,7 +32,11 @@ export default Ember.Route.extend({
 
     // THE MAIN GAME TICK
     tick: function() {
-      this.store.unloadAll('game');
+      try {
+        this.store.unloadAll('game');
+      } catch (err) {
+        Ember.Logger.warn('failed to unload game')
+      }
       var interval = 1000
       var clockMax = 30 * 1000 // in seconds
       var promises = [];

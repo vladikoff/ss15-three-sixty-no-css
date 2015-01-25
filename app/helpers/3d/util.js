@@ -123,28 +123,28 @@ export default {
       boardOpponentL1:
       {
         x: 25,
-        z: -5,
+        z: -20,
       },
       boardOpponentL2: {
         x: 25,
-        z: -20,
+        z: -35,
       },
       boardOpponentC1:
       {
         x: 0,
-        z: -5,
+        z: -20,
       },
       boardOpponentC2: {
         x: 0,
-        z: -20,
+        z: -35,
       },
       boardOpponentR1: {
         x: -25,
-        z: -5,
+        z: -20,
       },
       boardOpponentR2: {
         x: -25,
-        z: -20,
+        z: -35,
       }
 
 
@@ -171,7 +171,7 @@ export default {
    *       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
            util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
    */
-  addCard: function (position, owner, card) {
+  addCard: function (key, card, role) {
     var scene = window.SCENE;
     if (scene) {
       var debug = location.search.indexOf('debug') > -1;
@@ -180,7 +180,7 @@ export default {
 
       Ember.Logger.info('Adding Card', card);
 
-      var destination = window.POSITIONS['board' + owner + position];
+      var destination = window.POSITIONS[key];
       if (!debug) {
         var data = card.get('id')
         destination.data = data;
@@ -189,10 +189,17 @@ export default {
       var geometry = new THREE.BoxGeometry(10, 15, 0.1);
       var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF, transparent: true}));
 
-      object.position.x = destination.x;
       object.position.y = 10;
-      object.position.z = destination.z;
-      object.name = 'board' + owner + position;
+      if (role === 'Opponent') {
+        object.position.x = destination.x * -1;
+        object.position.z = destination.z * -1;
+      } else {
+        object.position.x = destination.x;
+        object.position.z = destination.z;
+      }
+
+
+      object.name = key;
 
       var dmgTxt = text.createDmgText('2 DMG');
       object.add(dmgTxt);

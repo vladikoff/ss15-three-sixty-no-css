@@ -35,10 +35,12 @@ export default Ember.View.extend({
     })
   }),
   onBoardChange: function(controller, key) {
-    Ember.Logger.info('Key Changed:', key);
+    var cardId = this.get('controller.' + key)
+    Ember.Logger.info('Key Changed:', key, 'Card ID', cardId);
 
     if (!this.get('scene')) return
-    var isOpponent = this.get('controller.isOpponent')
+
+    /*var isOpponent = this.get('controller.isOpponent')
     key = key.replace('board', '')
 
     var owner = key.indexOf('Creator') !== -1 ? 'Creator' : 'Opponent'
@@ -48,13 +50,13 @@ export default Ember.View.extend({
       } else if (key.indexOf('Opponent') !== -1) {
         owner = 'Creator'
       }
-    }
+    }*/
 
-    var cardId = this.get('controller.board' + key)
-    var position = key.slice(-2)
+    var myRole = this.get('controller.isOpponent') ? 'Opponent' : 'Creator'
+
     this.get('controller').lookupCard(cardId).then((card) => {
-      Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
-      util.addCard(position, owner, card)
+      Ember.Logger.info('Creating mesh for card', key, 'with id:', card.get('id'));
+      util.addCard(key, card, myRole)
     })
   },
 
@@ -241,6 +243,9 @@ export default Ember.View.extend({
           var spot = intersects[0].object.name;
           // IF I CLICKED A CARD THAT MATCHES MY ROLE (Opponent or Creator) THEN SELECT IT.
           var myRole = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
+          if (myRole === 'Opponent') {
+
+          }
 
           // the card has my role in it
           // TODO: disable this if not my turn....!!!!!!!!!!!!!!!!!!!
