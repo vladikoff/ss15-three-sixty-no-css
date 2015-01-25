@@ -18,7 +18,7 @@ export default Ember.Route.extend({
           window._JRR_TOLKIEN = authData.github.accessToken;
           //this.controllerFor('application').set('ghToken', authData.github.accessToken);
           console.log("Authenticated successfully with payload:", authData);
-          this.controllerFor('application').gh('users/' + username, {}).then((user) =>{
+          this.controllerFor('application').gh('users/' + username).then((user) =>{
             user.id = user.login;
             this.store.createRecord('user', user).save().then(() => {
               this.controllerFor('navbar').set('user', user);
@@ -49,7 +49,7 @@ export default Ember.Route.extend({
         return retVal.filter(Boolean);
       }
 
-      this.controllerFor('application').gh('users/' + username + '/starred', [], true).then((stars) =>{
+      this.controllerFor('application').gh2('users/' + username + '/starred', [], true).then((stars) =>{
         stars.forEach((star) =>{
           star.id = star.full_name;
           star.user = this.store.find('user', username);
