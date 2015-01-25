@@ -34,12 +34,17 @@ export default Ember.Route.extend({
     tick: function() {
       var interval = 1000
       var clockMax = 30 * 1000 // in seconds
-
       var promises = [];
       var gameCtrl = this.controllerFor('game');
       var store = this.store;
       var {clock, turn} = gameCtrl.getProperties('clock', 'turn');
       var username = this.controllerFor('navbar').get('username');
+
+      // Properties we sync on every tick
+      var syncProps = [
+        'creatorHealth',
+        'opponentHealth',
+      ].concat(gameCtrl.get('boardKeys'))
 
       var p = store.find('game', gameCtrl.get('id')).then((game) => {
         var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
@@ -47,6 +52,9 @@ export default Ember.Route.extend({
         //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
         gameCtrl.set('opponent', opponent)
+        syncProps.forEach((p) => {
+          gameCtrl.set(p, game.get(p))
+        })
 
         // Is it our turn?
         if (game.get('turn') === username) {
@@ -90,6 +98,10 @@ export default Ember.Route.extend({
       }).then(() => {
         this.controllerFor('game').set('turn', false)
       })
+    },
+
+    setBoardPosition: function(pos) {
+      console.log('SET BOARD', pos)
     },
 
   }

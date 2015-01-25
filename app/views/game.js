@@ -34,6 +34,28 @@ export default Ember.View.extend({
     image.src = src
   }),
 
+  // Add board keys
+  dynamicallyAddBoardKeyObservers: Ember.on('didInsertElement', function() {
+    this.get('controller.boardKeys').forEach((key) => {
+      Ember.addObserver(this.get('controller'), key, this, this.onBoardChange)
+    })
+  }),
+  onBoardChange: function(controller, key) {
+    if (!this.get('scene')) return
+    var data = controller.get(key)
+    Ember.Logger.info('Adding Card', data);
+    var destination = window.POSITIONS[key];
+    destination.data = data;
+
+    var geometry = new THREE.BoxGeometry(5, 10, 0.1);
+    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
+    object.position.x = destination.x;
+    object.position.y = 10;
+    object.position.z = destination.z;
+    object.name = key;
+    this.get('scene').add(object);
+  },
+
   init3d: function () {
     var self = this;
 
