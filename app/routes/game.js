@@ -60,6 +60,7 @@ export default Ember.Route.extend({
 
           //Ember.Logger.info('** Setting opponent:', opponent);
           gameCtrl.set('opponent', opponent)
+          var turn = game.get('turn')
 
 
           // GAMEOVER CONDITIONS
@@ -85,7 +86,7 @@ export default Ember.Route.extend({
           /////////////////////
 
           // Is it our turn?
-          if (game.get('turn') === username) {
+          if (turn === username) {
             // Has our time expired?
             if (delta >= clockMax) {
               Ember.Logger.info('Switching turns...');
@@ -107,7 +108,7 @@ export default Ember.Route.extend({
             gameCtrl.set(p, game.get(p))
           })
 
-          if (game.get('turn') === username) {
+          if (turn === username) {
             return  game.save();
           } else {
             return Ember.RSVP.resolve();
