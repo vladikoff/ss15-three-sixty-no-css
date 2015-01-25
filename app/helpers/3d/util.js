@@ -202,10 +202,10 @@ export default {
 
       object.name = key;
 
-      var dmgTxt = text.createDmgText(card.get('attack') + ' DMG');
+      var dmgTxt = text.createDmgText(card.get('atk') + ' DMG');
       object.add(dmgTxt);
 
-      var hpTxt = text.createHpText(card.get('hp') + ' HP');
+      var hpTxt = text.createHpText(card.get('def') + ' HP');
       hpTxt.name = 'hp';
       object.add(hpTxt);
 

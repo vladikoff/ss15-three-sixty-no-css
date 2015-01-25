@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import util from '../helpers/3d/util';
 
 export default Ember.Route.extend({
   redirect: function() {
@@ -139,6 +140,9 @@ export default Ember.Route.extend({
 
     // When a card is selected
     selectCard: function(card) {
+      SOUNDTRACK.select();
+      Ember.Logger.info('selectCard');
+      util.animationBoardSelection();
       this.controllerFor('game').set('lastSelectedCard', card.get('id'))
     },
 
@@ -200,7 +204,6 @@ export default Ember.Route.extend({
     setHP: function(contKey, hp) {
       var position = contKey.slice(11);
       Ember.Logger.info('Calling setHP', position, hp);
-
 
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
