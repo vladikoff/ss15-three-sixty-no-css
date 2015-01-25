@@ -48,9 +48,12 @@ export default {
       }
     ];
 
+    // CRUISE CONTROLLLLL
+    window.__PLACEHOLDER_MESHES = [];
+
     pos.forEach(position => {
       var geometry = new THREE.BoxGeometry(30, 0.1, 120);
-      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: position.c}));
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: position.c, transparent: true}));
       object.material.ambient = object.material.color;
       object.position.x = position.x;
       object.position.y = 2;
@@ -62,6 +65,7 @@ export default {
       scene.add(object);
 
       if (position.add) {
+        window.__PLACEHOLDER_MESHES.push(object);
         scene._clickable_objects.push(object);
       }
 
@@ -72,7 +76,7 @@ export default {
    */
   createBase: function(scene) {
     var geometry = new THREE.SphereGeometry( 15, 32, 32 );
-    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
+    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF, transparent: true}));
     object.material.ambient = object.material.color;
     object.position.x = 0;
     object.position.y = 2;
@@ -290,7 +294,6 @@ export default {
       window.__ATTACK_TWEENS = [];
     }
 
-
     var scene = window.SCENE;
     // TODO: Get a better list
     var oppositeObjs = [
@@ -302,24 +305,25 @@ export default {
       'boardOpponentR2'
     ];
 
+    // TODO: IF THERE ARE NO OBJECTS PROTECTING THE BASE IN THIS LINE, then BASE CAN BE ATTACKED.
+    var foundObjs = false;
+
     oppositeObjs.forEach(function (cardName) {
-
       var sourceObject = scene.getObjectByName(cardName);
+
       if (sourceObject) {
-        var t1 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 0.6 }, 1000 )
-        var t2 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 1 }, 1000 )
-
-        t1.chain(t2);
-        t2.chain(t1);
-        t1.start();
-
-        t1.onStop(function () {
-          sourceObject.material.opacity = 1;
-        });
-
-        window.__ATTACK_TWEENS.push(t1);
+        foundObjs = true;
+        var resultTween = tweenOpacity(sourceObject);
+        window.__ATTACK_TWEENS.push(resultTween);
       }
-    })
+    });
+
+    // no cards present, then base is attackable
+    if (!foundObjs) {
+      var sourceObject = scene.getObjectByName('opponentBase');
+      var resultTween = tweenOpacity(sourceObject);
+      window.__ATTACK_TWEENS.push(resultTween);
+    }
   },
   stopAllOppositeCardsAttackable: function() {
     if (window.__ATTACK_TWEENS) {
@@ -327,6 +331,36 @@ export default {
         tween.stop();
       })
     }
+  },
+  animationBoardSelection: function () {
+    this.stopBoardSelection();
+    
+    if (window.__PLACEHOLDER_MESHES) {
+      window.__PLACEHOLDER_MESHES.forEach(function (p) {
+        var resultTween = tweenOpacity(p);
+        p.__tween = resultTween;
+      })
+    }
+  },
+  stopBoardSelection: function() {
+    if (window.__PLACEHOLDER_MESHES) {
+      window.__PLACEHOLDER_MESHES.forEach(function (p) {
+        if (p.__tween) p.__tween.stop();
+      })
+    }
   }
 }
 
+function tweenOpacity(sourceObject) {
+    var t1 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 0.3 }, 500 )
+    var t2 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 1 }, 500 )
+
+    t1.chain(t2);
+    t2.chain(t1);
+    t1.start();
+
+    t1.onStop(function () {
+      sourceObject.material.opacity = 1;
+    });
+    return t1;
+}

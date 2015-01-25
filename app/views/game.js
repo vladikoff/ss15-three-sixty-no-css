@@ -128,11 +128,12 @@ export default Ember.View.extend({
       util.createPlanes(scene);
       util.createCardSpots(scene);
       util.createBase(scene);
-
-      //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
-      util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
-      util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
-      util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      var __DEBUG = location.search.indexOf('debug') > -1;
+      if (__DEBUG) {
+        util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
+        util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
+        util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      }
       //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R2', 'Creator', 'Pencroff/WebStorm-Live-Template');
 
@@ -231,6 +232,8 @@ export default Ember.View.extend({
           Ember.Logger.info('You are the opponent? ', self.get('controller.isOpponent'))
           var owner = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
           self.get('controller').send('setBoard', 'board' + owner + direction)
+          // WE PLACE A CARD, STOP ANIMATION
+          util.stopBoardSelection();
         } else {
           // A card was clicked
           var spot = intersects[0].object.name;

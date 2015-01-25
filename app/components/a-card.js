@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import util from '../helpers/3d/util';
 
 export default Ember.Component.extend({
   tagName: 'li',
@@ -13,6 +14,7 @@ export default Ember.Component.extend({
     var inGame = window.location.pathname.indexOf('game') > -1;
     if (inGame) {
       window.CURRENT_CARD = cardData;
+      util.animationBoardSelection();
 
     }
     this.sendAction('action', this.get('data'))
