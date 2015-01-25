@@ -19,6 +19,7 @@ export default Ember.Route.extend({
   actions: {
     didTransition: function() {
       // Start up the tick
+      this.controllerFor('index').set('waitingForGame', false)
       this.send('tick')
     },
 

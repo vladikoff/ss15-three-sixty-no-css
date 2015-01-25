@@ -2,7 +2,11 @@
 
 {{#if deck}}
   <div class="well find-game-well">
-  <button class="btn btn-primary btn-lg btn-block" {{action "findMatch"}}>Find a Game</button>
+    {{#if waitingForGame}}
+      <button class="btn btn-primary btn-lg btn-block" {{action "cancel"}}>Waiting for another player...</button>
+    {{else}}
+      <button class="btn btn-primary btn-lg btn-block" {{action "findMatch"}}>Find a Game</button>
+    {{/if}}
   </div>
 
   <h1>Current Card Deck</h1>

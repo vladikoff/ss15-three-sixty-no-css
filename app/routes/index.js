@@ -98,6 +98,7 @@ export default Ember.Route.extend({
     },
     waitForMatch: function() {
       var username = this.controllerFor('navbar').get('username');
+      this.controllerFor('index').set('waitingForGame', true);
       Ember.Logger.info('Waiting for a game...');
       this.store.find('game', username).then((g) => {
         // You have an opponent now
@@ -111,6 +112,16 @@ export default Ember.Route.extend({
           this.send('waitForMatch')
         }, 1000)
       });
+    },
+    cancel: function() {
+      var username = this.controllerFor('navbar').get('username');
+      this.store.find('game', username).then((game) => {
+        return game.destroyRecord()
+      }).catch(() => {
+        return Ember.RSVP.resolve()
+      }).finally(() => {
+        this.controllerFor('index').set('waitingForGame', false)
+      })
     },
   },
 });

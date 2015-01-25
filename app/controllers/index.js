@@ -23,4 +23,7 @@ export default Ember.Controller.extend({
   // Cards in your deck
   deck: Ember.computed.alias('controllers.game.deck'),
 
+  // If we are waiting for a game
+  waitingForGame: false,
+
 });
