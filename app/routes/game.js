@@ -106,7 +106,7 @@ export default Ember.Route.extend({
 
     // When a card is selected
     selectCard: function(card) {
-      this.controllerFor('game').set('lastSelectedCard', card.get('name'))
+      this.controllerFor('game').set('lastSelectedCard', card.get('id'))
     },
 
     // Call to set a specific board position
