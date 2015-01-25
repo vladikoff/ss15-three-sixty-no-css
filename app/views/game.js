@@ -227,6 +227,7 @@ export default Ember.View.extend({
           // A grid space clicked
           var direction = intersects[0].object._direction;
           direction = direction.slice(0, 1).toUpperCase() + '1'
+          Ember.Logger.info('You are the opponent? ', self.get('controller.isOpponent'))
           var owner = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
           self.get('controller').send('setBoard', 'board' + owner + direction)
         } else {
