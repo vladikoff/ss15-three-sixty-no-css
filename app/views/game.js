@@ -229,7 +229,7 @@ export default Ember.View.extend({
 
         var direction = intersects[0].object._direction;
         direction = direction.slice(0, 1).toUpperCase() + '1'
-        var owner = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
+        var owner = self.get('controller.isOpponent') ? 'Creator' : 'Opponent'
         self.get('controller').send('setBoard', 'board' + owner + direction, 'neoziro/grunt-shipit' + Math.random())
 
         container.style.cursor = 'move';
