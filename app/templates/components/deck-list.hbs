@@ -1,5 +1,20 @@
+<!--
+<p>
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search for...">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button">Go!</button>
+    </span>
+  </div>
+</p>
+-->
+
+<h3><span>{{data.length}}</span> <span>cards in deck</span></h3>
+
+<ul>
 {{#each card in data}}
   <li>
-    {{small-card class="draggable" showCurrent="showCurrent" data=card}}
+    {{small-card class="draggable" action=action showCurrent="showCurrent" data=card}}
   </li>
 {{/each}}
+</ul>

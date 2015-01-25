@@ -30,6 +30,16 @@ export default Ember.Controller.extend({
   actions: {
     showCurrent: function(data) {
       this.set('current', data);
+    },
+
+    addToDeck: function(data) {
+      deck.pushObject(data);
+      library.removeObject(data);
+    },
+
+    removeFromDeck: function(data) {
+      deck.removeObject(data);
+      library.pushObject(data);
     }
   },
 

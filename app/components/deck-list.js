@@ -1,18 +1,24 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  tagName: 'ul',
+  tagName: 'div',
   classNames: ['cards', 'deck-list'],
   data: null,
   wrapSortable: function() {
-    // Make the list sortable ya know?
-    Sortable.create(this.element);
+    Sortable.create(this.element.querySelector('ul'));
   }.on('didInsertElement'),
 
   actions: {
     showCurrent: function(data) {
       this.sendAction('showCurrent', data);
+    },
+
+    addToDeck: function(data) {
+      this.sendAction('addToDeck', data);
+    },
+
+    removeFromDeck: function(data) {
+      this.sendAction('removeFromDeck', data);
     }
   }
 });
-

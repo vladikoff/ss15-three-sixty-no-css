@@ -10,27 +10,29 @@
   </div>
 
   <div class="col-xs-6 col-sm-4">
-    <h2>Current Card Deck</h2>
+    <h2>Your Deck</h2>
 
-    {{deck-list showCurrent="showCurrent" data=deck}}
+    {{deck-list action="removeFromDeck" showCurrent="showCurrent" data=deck}}
   </div>
 
   <div class="col-xs-6 col-sm-4">
-    <h2>Card preview</h2>
+    <h2>Card Preview</h2>
 
     <div class="preview">
       {{#if current}}
         {{big-card data=current}}
       {{else}}
-        <div class="none-selected">No card selected</div>
+        <div class="none-selected">
+          <h3>No card selected</h3>
+        </div>
       {{/if}}
     </div>
   </div>
 
   <div class="col-xs-6 col-sm-4">
-    <h2>Your Card Collection</h2>
+    <h2>Available Cards</h2>
 
-    {{deck-list showCurrent="showCurrent" data=library}}
+    {{deck-list action="addToDeck" showCurrent="showCurrent" data=library}}
   </div>
 
 {{else}}
