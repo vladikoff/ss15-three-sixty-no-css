@@ -48,6 +48,10 @@ export default {
       object.position.z = position.z;
       object.castShadow = true;
       object.receiveShadow = true;
+      object.spots = {
+        place0: null,
+        place1: null
+      };
       scene.add(object);
 
       if (position.add) {
@@ -60,25 +64,33 @@ export default {
 
   },
 
-  getAvatar: function () {
-  var image = new Image();
-  image.crossOrigin = "Anonymous";
+  getAvatar: function (app, navbar, game) {
+    var image = new Image();
+    image.crossOrigin = "Anonymous";
 
-  image.addEventListener('load', function () {
-    console.log('loaded img');
-    var texture = new THREE.Texture(image);
-    texture.needsUpdate = true;
-    var geometry = new THREE.BoxGeometry( 30, 30, 0.1 );
-    var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
-    mesh.rotation.y = Math.PI;
-    mesh.position.x = 0;
-    mesh.position.y = 15;
-    mesh.position.z = -80;
-    window.SCENE.add(mesh);
-  }, false);
+    image.addEventListener('load', function () {
+      console.log('loaded img');
+      var texture = new THREE.Texture(image);
+      texture.needsUpdate = true;
+      var geometry = new THREE.BoxGeometry( 30, 30, 0.1 );
+      var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+      mesh.rotation.y = Math.PI;
+      mesh.position.x = 0;
+      mesh.position.y = 15;
+      mesh.position.z = -80;
+      window.SCENE.add(mesh);
+    }, false);
 
-  image.src = 'https://avatars0.githubusercontent.com/u/128755?v=3&s=460';
 
+    window.GAME = game;
+    var username = navbar.get('username');
+    if (username === game.get('id')) {
+      username = game.get('opponent');
+    }
+
+    app.gh('users/' + username).then((user) =>{
+      image.src = user.avatar_url;
+    });
   },
 
   createCardSpots: function (scene) {
@@ -153,6 +165,22 @@ export default {
     return objects;
 
   },
+  addCard: function (selected, cardData) {
+    var scene = window.SCENE;
+    if (scene) {
+      Ember.Logger.info('Adding Card', cardData);
+
+      var spot = selected.spots.place0;
+      // if place0 taken
+      if (spot) {
+        if (selected.spots.place1) {
+          throw new Error('No Space Left');
+        }
+        spot = selected.spots.place1;
+      }
+    }
+  }
+
 
 
 }

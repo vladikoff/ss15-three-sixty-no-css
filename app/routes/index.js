@@ -51,8 +51,11 @@ export default Ember.Route.extend({
         // no existing game, continue
         return Ember.RSVP.resolve()
       }).then(() => {
+        this.store.unloadAll('game');
+
         return this.store.findAll('game')
       }).then((data) => {
+        Ember.Logger.info('Finding open Games');
         // Find open games
         var content = data.get('content')
 

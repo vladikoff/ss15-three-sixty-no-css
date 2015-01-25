@@ -5,4 +5,6 @@ export default DS.Model.extend({
   starred_count: DS.attr('number'),
   watchers_count: DS.attr('number'),
   user: DS.belongsTo('user'),
+  hp: 3,
+  defense: 3
 });

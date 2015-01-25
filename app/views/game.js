@@ -10,13 +10,12 @@ export default Ember.View.extend({
 
   didInsertElement: function () {
     this._super()
+    var self = this;
 
     var container, stats, plane;
     var camera, controls, scene, projector, renderer;
     var objects = [], plane;
-    var mouse = new THREE.Vector2(),
-      offset = new THREE.Vector3(),
-      INTERSECTED, SELECTED;
+    var mouse = new THREE.Vector2(), offset = new THREE.Vector3(), INTERSECTED, SELECTED;
     init();
     animate();
     function init() {
@@ -76,8 +75,12 @@ export default Ember.View.extend({
         objects.push(object);
 
       }
+      var controller = self.get('controller');
+      var navbar = controller.controllerFor('navbar');
+      var gameCtrl = controller.controllerFor('game');
+      var app = controller.controllerFor('application');
 
-      util.getAvatar(scene);
+      util.getAvatar(app, navbar, gameCtrl);
       util.createPlanes(scene, objects);
       util.createCardSpots(scene);
 
@@ -157,6 +160,12 @@ export default Ember.View.extend({
         //controls.enabled = false;
         SELECTED = intersects[0].object;
         console.log(SELECTED);
+        console.log(CURRENT_CARD);
+
+        // if we can place
+        if (SELECTED.spots && window.CURRENT_CARD) {
+          util.addCard(SELECTED, CURRENT_CARD);
+        }
 
         container.style.cursor = 'move';
       }

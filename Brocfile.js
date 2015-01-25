@@ -13,6 +13,7 @@ app.import('vendor/cannon.js');
 app.import('vendor/TrackballControls.js');
 app.import('vendor/Detector.js');
 app.import('vendor/moment.js');
+app.import('vendor/tweenjs.js');
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
