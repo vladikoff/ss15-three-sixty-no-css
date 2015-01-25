@@ -4,8 +4,8 @@
   <div class="game-toolbar">
     <div class="clock">{{clock}}s</div>
     <div class="turn">
-      {{#if turn}}
-        {{id}}'s turn <button {{action "endTurn"}}>End Turn</button>
+      {{#if isMyTurn}}
+        {{username}}'s turn <button {{action "endTurn"}}>End Turn</button>
       {{else}}
         {{opponent}}'s turn
       {{/if}}

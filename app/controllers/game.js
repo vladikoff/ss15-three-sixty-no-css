@@ -1,6 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  needs: ['navbar'],
+  username: Ember.computed.alias('controllers.navbar.username'),
+
   // id of the game we are playing
   id: null,
 
@@ -21,6 +24,9 @@ export default Ember.Controller.extend({
 
   // Whose turn is it?
   turn: '',
+  isMyTurn: Ember.computed('turn', function() {
+    return !!(this.get('turn') === this.get('username'))
+  }),
 
   // game board positions
   boardKeys: [
