@@ -151,14 +151,17 @@ export default {
   addCard: function (position, owner, card) {
     var scene = window.SCENE;
     if (scene) {
+      var debug = location.search.indexOf('debug') > -1;
 
-      if (!card.get) throw new Error('You tried setting a card without an id')
+      if (!card.get && !debug) throw new Error('You tried setting a card without an id')
 
       Ember.Logger.info('Adding Card', card);
-      var data = card.get('id')
 
       var destination = window.POSITIONS['board' + owner + position];
-      destination.data = data;
+      if (!debug) {
+        var data = card.get('id')
+        destination.data = data;
+      }
 
       var geometry = new THREE.BoxGeometry(10, 15, 0.1);
       var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
@@ -185,8 +188,9 @@ export default {
         mesh.position.y = -2;
         object.add(mesh);
       }, false);
-      image.src = card.get('owner.avatar_url');
-
+      if (!debug) {
+        image.src = card.get('owner.avatar_url');
+      }
       scene.add(object);
       scene._clickable_objects.push(object);
     }
@@ -222,6 +226,35 @@ export default {
       .onComplete(function (params) {
         scene.remove(sourceObject);
       }).start();
+  },
+  cardAttackSelectionMode : function (selectedCardId) {
+    //stop last selected card
+    var lastSelected = window.__SELECTED_CARD_TWEEN;
+    if (lastSelected) lastSelected.stop();
+
+    var scene = window.SCENE;
+    var rad90 = Math.PI/2;
+    var sourceObject = scene.getObjectByName(selectedCardId);
+    var up = 20;
+    var down = sourceObject.position.y;
+
+    var tween = new TWEEN.Tween(sourceObject.position)
+      .to({y: up}, 500)
+      .easing(TWEEN.Easing.Quadratic.Out);
+
+    var tweenBack = new TWEEN.Tween(sourceObject.position)
+      .to({y: down}, 1000);
+
+    tween.chain(tweenBack);
+    tweenBack.chain(tween);
+
+    tween.onStop(function (params) {
+      sourceObject.position.y = down;
+    });
+
+    window.__SELECTED_CARD_TWEEN = tween.start();
+
+
   }
 }
 

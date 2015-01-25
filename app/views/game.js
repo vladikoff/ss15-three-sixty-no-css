@@ -128,8 +128,8 @@ export default Ember.View.extend({
       util.createCardSpots(scene);
 
       //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
-      //util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
-      //util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
+      util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R2', 'Creator', 'Pencroff/WebStorm-Live-Template');
 
@@ -231,6 +231,8 @@ export default Ember.View.extend({
         } else {
           // A card was clicked
           var spot = intersects[0].object.name;
+          util.cardAttackSelectionMode(spot);
+          Ember.Logger.info(spot);
         }
 
         container.style.cursor = 'move';
