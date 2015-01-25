@@ -20,8 +20,7 @@ export default Ember.Controller.extend({
   clock: 0,
 
   // Whose turn is it?
-  // false = Not yours, true = your turn
-  turn: false,
+  turn: '',
 
   // game board positions
   boardKeys: [

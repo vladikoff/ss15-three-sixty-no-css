@@ -55,9 +55,6 @@ export default Ember.Route.extend({
           //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
           gameCtrl.set('opponent', opponent)
-          syncProps.forEach((p) => {
-            gameCtrl.set(p, game.get(p))
-          })
 
           // Is it our turn?
           if (game.get('turn') === username) {
@@ -67,17 +64,20 @@ export default Ember.Route.extend({
               game.set('lastTurnSwitch', moment().utc())
               game.set('turn', opponent)
             }
-            gameCtrl.set('turn', true)
             gameCtrl.set('opponentProbablyLeft', false)
           } else {
             // Has the other user's time expired?
             if (delta >= clockMax) {
               gameCtrl.set('opponentProbablyLeft', true)
             }
-            gameCtrl.set('turn', false)
           }
 
+          // Set controller values
           gameCtrl.set('clock', parseInt((clockMax - delta) / 1000))
+          gameCtrl.set('turn', game.get('turn'))
+          syncProps.forEach((p) => {
+            gameCtrl.set(p, game.get(p))
+          })
 
           return game.save();
         });

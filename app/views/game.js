@@ -2,12 +2,6 @@ import Ember from 'ember';
 import util from '../helpers/3d/util';
 
 export default Ember.View.extend({
-  // Example on how to know when the turn has changed here in the view
-  onTurnChange: Ember.observer('controller.turn', function() {
-    var myTurn = this.get('controller.turn')
-    Ember.Logger.info('It is ' + myTurn + ' your turn')
-  }),
-
   didInsertElement: function() {
     this._super()
     this.init3d()
