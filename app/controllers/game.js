@@ -1,9 +1,11 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ['navbar', 'index'],
+  needs: ['navbar', 'index', 'application'],
   username: Ember.computed.alias('controllers.navbar.username'),
   cards: Ember.computed.alias('controllers.index.library'),
+  gh: Ember.computed.alias('controllers.application.gh'),
+  Card: Ember.computed.alias('controllers.index.Card'),
 
   // id of the game we are playing
   id: null,
@@ -12,8 +14,13 @@ export default Ember.Controller.extend({
   lastSelectedCard: null,
   lookupCard: function(id) {
     var card = this.get('cards').findBy('id', id)
-    if (!card) return Ember.RSVP.reject(new Error('Could not find card'))
-    return Ember.RSVP.resolve(card)
+    if (card) return Ember.RSVP.resolve(card)
+    var gh = this.get('gh')
+    var Card = this.get('Card')
+    return gh('repos/' + id).then((repo) => {
+      Ember.Logger.info('Could not find card in library, looked up on gh: ', repo)
+      return Card.create(repo)
+    })
   },
 
   // name of your opponent
