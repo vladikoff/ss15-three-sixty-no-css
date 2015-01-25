@@ -35,6 +35,8 @@ export default Ember.View.extend({
     })
   }),
   onBoardChange: function(controller, key) {
+    Ember.Logger.info('Key Changed:', key);
+
     if (!this.get('scene')) return
     var isOpponent = this.get('controller.isOpponent')
     key = key.replace('board', '')
@@ -251,6 +253,13 @@ export default Ember.View.extend({
 
             // IF I Have a card Selected, then I can choose a card to attack
             if (window.__SELECTED_CARD) {
+            /// Logic:
+
+            if (spot === 'opponentBase') {
+              self.get('controller').send('attackBase')
+            }
+
+            /// Animations
               util.attackCard(window.__SELECTED_CARD, spot);
 
               util.cardSetHp(spot, 0);

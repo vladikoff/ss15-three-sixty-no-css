@@ -39,7 +39,6 @@ export default DS.Model.extend({
   hpOpponentR1: DS.attr('number', { defaultValue: 0 }),
   hpOpponentR2: DS.attr('number', { defaultValue: 0 }),
 
-
-  creatorHealth: DS.attr('number', { defaultValue: function() { return 10 } }),
-  opponentHealth: DS.attr('number', { defaultValue: function() { return 10 } })
+  opponentBase: DS.attr('number', { defaultValue: 10 }),
+  creatorBase: DS.attr('number', { defaultValue: 10 }),
 });

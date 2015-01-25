@@ -43,8 +43,8 @@ export default Ember.Route.extend({
 
       // Properties we sync on every tick
       var syncProps = [
-        'creatorHealth',
-        'opponentHealth',
+        'opponentBase',
+        'creatorBase',
       ].concat(gameCtrl.get('boardKeys'))
 
       if (id) {
@@ -53,7 +53,31 @@ export default Ember.Route.extend({
           var delta = moment().utc() - game.get('lastTurnSwitch')
           //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
+          Ember.Logger.info('** Setting opponent:', opponent);
           gameCtrl.set('opponent', opponent)
+
+
+          // GAMEOVER CONDITIONS
+          var thisIsCreator = game.get('id') === username;
+          var creatorHp = game.get('creatorBase');
+          var opponentHp = game.get('opponentBase');
+          if (opponentHp === 0 || creatorHp === 0) {
+            // someone lost
+
+            // if opponent lost and you are the creator
+            if ( (opponentHp === 0 && thisIsCreator) || (creatorHp === 0 && !thisIsCreator)) {
+              // YOU WIN
+              Ember.Logger.info('You win!', 'thisIsCreator: ', thisIsCreator );
+
+            } else {
+              Ember.Logger.info('You Lost!', 'thisIsCreator: ', thisIsCreator );
+              // if creator lost and you are the creator
+              // YOU LOST
+            }
+
+          }
+
+          /////////////////////
 
           // Is it our turn?
           if (game.get('turn') === username) {
@@ -123,10 +147,45 @@ export default Ember.Route.extend({
         this.store.find('game', id).then((game) => {
           gameCtrl.set(pos, card)
           game.set(pos, card)
+          // set card HP into db as well.
+          // convert position key to an hp key
+          var hpKey = 'hp' + pos.slice(5)
+          game.set(hpKey, 4);
+
+
           return game.save()
         })
       }
     },
+    // Player attacked a base in the view.
+    attackBase: function() {
+      Ember.Logger.info('Calling attackBase');
+
+      var gameCtrl = this.controllerFor('game')
+      var username = this.controllerFor('navbar').get('username')
+
+      var id = gameCtrl.get('id')
+      if (id) {
+
+        this.store.find('game', id).then((game) => {
+
+          if (username === id) {
+            var curHp = game.get('opponentBase');
+            game.set('opponentBase', curHp--);
+
+          } else {
+            var curHp = game.get('creatorBase');
+            game.set('creatorBase', curHp--);
+          }
+
+          return game.save()
+        })
+      } else {
+        Ember.Logger.warn('No Game Found');
+      }
+    },
+
+
 
   }
 });

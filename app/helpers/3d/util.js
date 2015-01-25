@@ -244,10 +244,10 @@ export default {
     tween.chain(tweenBack);
     tween.start();
   },
-  destroyCard: function (position, owner) {
+  destroyCard: function (spot) {
     var scene = window.SCENE;
-    Ember.Logger.info('Removing Card', 'board' + owner + position);
-    var sourceObject = scene.getObjectByName('board' + owner + position);
+    Ember.Logger.info('Removing Card', spot);
+    var sourceObject = scene.getObjectByName(spot);
 
     new TWEEN.Tween(sourceObject.position)
       .to({x: 200, y: 200, rotation: 0}, 3000)
