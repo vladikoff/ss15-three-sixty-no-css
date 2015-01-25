@@ -11,7 +11,9 @@ export default Ember.Controller.extend({
   // Last selected card
   lastSelectedCard: null,
   lookupCard: function(id) {
-    return Ember.RSVP.resolve(this.get('cards').findBy('id', id))
+    var card = this.get('cards').findBy('id', id)
+    if (!card) return Ember.RSVP.reject(new Error('Could not find card'))
+    return Ember.RSVP.resolve(card)
   },
 
   // name of your opponent
