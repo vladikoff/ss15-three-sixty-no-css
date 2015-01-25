@@ -139,5 +139,8 @@ export default Ember.Route.extend({
     deselect: function(card) {
       this.controllerFor('game').get('deck').removeObject(card)
     },
+    setCurrent: function() {
+      console.log(arguments);
+    },
   },
 });

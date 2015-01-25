@@ -9,4 +9,8 @@ export default Ember.Component.extend({
   click: function(e) {
     this.toggleProperty('selected');
   },
+  mouseEnter: function(e) {
+    this.sendAction('showCurrent', this.data);
+    console.log('here');
+  }
 });

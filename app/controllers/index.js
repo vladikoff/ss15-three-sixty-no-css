@@ -24,6 +24,16 @@ export default Ember.Controller.extend({
   // All the cards you have available
   library: [],
 
+  // The current card
+  current: null,
+
+  actions: {
+    showCurrent: function(data) {
+      console.log("current", data);
+      this.set('current', data);
+    }
+  },
+
   // Cards in your deck
   deck: Ember.computed.alias('controllers.game.deck'),
 

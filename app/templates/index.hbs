@@ -15,7 +15,7 @@
     <ul class="cards">
       {{#each card in deck}}
         <li>
-          {{small-card data=card}}
+          {{small-card showCurrent="showCurrent" data=card}}
         </li>
       {{/each}}
     </ul>
@@ -25,6 +25,11 @@
     <h2>Card preview</h2>
 
     <div class="preview">
+      {{#if current}}
+        {{big-card data=current}}
+      {{else}}
+        <div class="none-selected">No card selected</div>
+      {{/if}}
     </div>
   </div>
 
@@ -34,7 +39,7 @@
     <ul class="cards">
       {{#each card in library}}
         <li>
-        {{small-card data=card}}
+          {{small-card showCurrent="showCurrent" data=card}}
         </li>
       {{/each}}
     </ul>
