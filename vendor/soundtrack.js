@@ -4,7 +4,8 @@ var SOUNDTRACK = {
     this.conductor.setTimeSignature(4,4);
     this.conductor.setTempo(120);
     var piano = this.conductor.createInstrument();
-    piano.note('quarter', 'A4');/*
+
+    piano.note('tripletHalf', 'G4, C4')/*
     piano.note('quarter', 'A4');
     piano.note('quarter', 'C4');
     piano.note('quarter', 'C4').rest('quarter');
@@ -24,7 +25,22 @@ var SOUNDTRACK = {
     this.player.play();
   },
   hit: function () {
-    this.player.play();
+    var piano = this.conductor.createInstrument();
+    piano.note('tripletHalf', 'G4, C4')
+    var player = this.conductor.finish();
+    player.play();
+  },
+  select: function () {
+    var piano = this.conductor.createInstrument();
+    piano.note('eighth', 'A4');
+    var player = this.conductor.finish();
+    player.play();
+  },
+  startSomething: function () {
+    var piano = this.conductor.createInstrument();
+    piano.note('tripletHalf', 'G4, C4')
+    var player = this.conductor.finish();
+    player.play();
   }
 
 };

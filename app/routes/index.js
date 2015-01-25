@@ -48,6 +48,7 @@ export default Ember.Route.extend({
       })
     },
     findMatch: function () {
+      SOUNDTRACK.startSomething();
       var username = this.controllerFor('navbar').get('username');
 
       // If you already had an abandoned game

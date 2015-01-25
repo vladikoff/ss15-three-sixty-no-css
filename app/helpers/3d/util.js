@@ -164,7 +164,8 @@ export default {
       }
 
       var geometry = new THREE.BoxGeometry(10, 15, 0.1);
-      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF, transparent: true}));
+
       object.position.x = destination.x;
       object.position.y = 10;
       object.position.z = destination.z;
@@ -196,18 +197,21 @@ export default {
     }
   },
   attackCard: function (source, destination) {
+    Ember.Logger.info('Attacking', source, destination);
     var scene = window.SCENE;
 
-    var origSource = window.POSITIONS['board' + source];
+    var origSource = window.POSITIONS[source];
 
-    var sourceObject = scene.getObjectByName('board' + source);
-    var destinationObject = scene.getObjectByName('board' + destination);
+    var sourceObject = scene.getObjectByName(source);
+    var destinationObject = scene.getObjectByName(destination);
 
     var cameraOrigPos = window.CAMERA.position;
 
     var tween = new TWEEN.Tween(sourceObject.position)
       .to({x: destinationObject.position.x, z: destinationObject.position.z }, 500)
-      .easing(TWEEN.Easing.Quadratic.Out);
+      .easing(TWEEN.Easing.Quadratic.Out).onComplete(function (params) {
+          window.SOUNDTRACK.hit();
+      });
 
     var tweenBack = new TWEEN.Tween(sourceObject.position)
       .to({x: origSource.x, z: origSource.z }, 1000);
@@ -233,7 +237,6 @@ export default {
     if (lastSelected) lastSelected.stop();
 
     var scene = window.SCENE;
-    var rad90 = Math.PI/2;
     var sourceObject = scene.getObjectByName(selectedCardId);
     var up = 20;
     var down = sourceObject.position.y;
@@ -253,8 +256,59 @@ export default {
     });
 
     window.__SELECTED_CARD_TWEEN = tween.start();
+  },
+  stopAttackSelectionMode: function () {
+    var lastSelected = window.__SELECTED_CARD_TWEEN;
+    if (lastSelected) lastSelected.stop();
+    window.__SELECTED_CARD = null;
+  },
+  makeAllOppositeCardsAttackable: function () {
+    if (window.__ATTACK_TWEENS) {
+      window.__ATTACK_TWEENS.forEach(function (tween) {
+        tween.stop();
+      })
+      window.__ATTACK_TWEENS = [];
+    } else {
+      window.__ATTACK_TWEENS = [];
+    }
 
 
+    var scene = window.SCENE;
+    // TODO: Get a better list
+    var oppositeObjs = [
+      'boardOpponentL1',
+      'boardOpponentL2',
+      'boardOpponentC1',
+      'boardOpponentC2',
+      'boardOpponentR1',
+      'boardOpponentR2'
+    ];
+
+    oppositeObjs.forEach(function (cardName) {
+
+      var sourceObject = scene.getObjectByName(cardName);
+      if (sourceObject) {
+        var t1 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 0.6 }, 1000 )
+        var t2 = new TWEEN.Tween( sourceObject.material ).to( { opacity: 1 }, 1000 )
+
+        t1.chain(t2);
+        t2.chain(t1);
+        t1.start();
+
+        t1.onStop(function () {
+          sourceObject.material.opacity = 1;
+        });
+
+        window.__ATTACK_TWEENS.push(t1);
+      }
+    })
+  },
+  stopAllOppositeCardsAttackable: function() {
+    if (window.__ATTACK_TWEENS) {
+      window.__ATTACK_TWEENS.forEach(function (tween) {
+        tween.stop();
+      })
+    }
   }
 }
 

@@ -128,6 +128,7 @@ export default Ember.View.extend({
       util.createCardSpots(scene);
 
       //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
+      util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
       util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
@@ -231,7 +232,26 @@ export default Ember.View.extend({
         } else {
           // A card was clicked
           var spot = intersects[0].object.name;
-          util.cardAttackSelectionMode(spot);
+          // IF I CLICKED A CARD THAT MATCHES MY ROLE (Opponent or Creator) THEN SELECT IT.
+          var myRole = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
+
+          // the card has my role in it
+          // TODO: disable this if not my turn....!!!!!!!!!!!!!!!!!!!
+          if (spot.indexOf(myRole) > -1) {
+            window.__SELECTED_CARD = spot;
+            util.cardAttackSelectionMode(spot);
+            util.makeAllOppositeCardsAttackable();
+          } else {
+            // ELSE I clicked on a card on the other side
+
+            // IF I Have a card Selected, then I can choose a card to attack
+            if (window.__SELECTED_CARD) {
+              util.attackCard(window.__SELECTED_CARD, spot);
+              util.stopAttackSelectionMode();
+              util.stopAllOppositeCardsAttackable();
+            }
+          }
+
           Ember.Logger.info(spot);
         }
 
