@@ -130,12 +130,14 @@ export default Ember.View.extend({
       util.createPlanes(scene);
       util.createCardSpots(scene);
 
+      //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
       util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
-      util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      //util.addCard('R2', 'Creator', 'Pencroff/WebStorm-Live-Template');
 
       setTimeout(function () {
-        util.attackCard('CreatorR1', 'OpponentL1');
+        util.attackCard('CreatorL1', 'OpponentL1');
         setTimeout(function () {
           util.destroyCard('L1', 'Opponent');
         }, 2000);

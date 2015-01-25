@@ -1,3 +1,5 @@
+import text from './text';
+
 export default {
   controller: null,
   createPlanes: function (scene) {
@@ -153,16 +155,17 @@ export default {
       var destination = window.POSITIONS['board' + owner + position];
       destination.data = data;
 
-      var geometry = new THREE.BoxGeometry(5, 10, 0.1);
+      var geometry = new THREE.BoxGeometry(10, 15, 0.1);
       var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
       object.position.x = destination.x;
       object.position.y = 10;
       object.position.z = destination.z;
       object.name = 'board' + owner + position;
 
-
-      //var src = this.get('controller.opponentAvatarUrl')
-      //if (!src) return
+      var dmgTxt = text.createDmgText('2 DMG');
+      object.add(dmgTxt);
+      var hpTxt = text.createHpText('2 HP');
+      object.add(hpTxt);
 
       var image = new Image();
       image.crossOrigin = "Anonymous";
@@ -170,20 +173,17 @@ export default {
         console.log('loaded img');
         var texture = new THREE.Texture(image);
         texture.needsUpdate = true;
-        var geometry = new THREE.BoxGeometry(5, 5, 0.9);
+        var geometry = new THREE.BoxGeometry(9, 9, 0.6);
         var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+        // TODO: this messh should also
         mesh.rotation.y = Math.PI;
-        mesh.position.y = -5;
+        mesh.position.y = -2;
         object.add(mesh);
       }, false);
       image.src = 'https://avatars2.githubusercontent.com/u/1630826?v=3&s=200';
 
-
-
       scene.add(object);
       scene._clickable_objects.push(object);
-
-
     }
   },
   attackCard: function (source, destination) {

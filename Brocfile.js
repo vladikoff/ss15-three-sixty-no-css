@@ -9,12 +9,12 @@ app.import('bower_components/band.js/dist/band.js');
 app.import('bower_components/firebase/firebase.js');
 app.import('bower_components/emberfire/dist/emberfire.js');
 app.import('vendor/Three.js');
-app.import('vendor/cannon.js');
 app.import('vendor/TrackballControls.js');
 app.import('vendor/Detector.js');
 app.import('vendor/moment.js');
 app.import('vendor/tweenjs.js');
 app.import('vendor/soundtrack.js');
+app.import('vendor/helvetiker_regular.js');
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
