@@ -148,10 +148,12 @@ export default {
    *       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
            util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
    */
-  addCard: function (position, owner, data) {
+  addCard: function (position, owner, card) {
     var scene = window.SCENE;
     if (scene) {
-      Ember.Logger.info('Adding Card', data);
+      Ember.Logger.info('Adding Card', card);
+      var data = card.get('id')
+
       var destination = window.POSITIONS['board' + owner + position];
       destination.data = data;
 
@@ -180,7 +182,7 @@ export default {
         mesh.position.y = -2;
         object.add(mesh);
       }, false);
-      image.src = 'https://avatars2.githubusercontent.com/u/1630826?v=3&s=200';
+      image.src = card.get('owner.avatar_url');
 
       scene.add(object);
       scene._clickable_objects.push(object);

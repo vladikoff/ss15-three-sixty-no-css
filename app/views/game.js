@@ -45,7 +45,7 @@ export default Ember.View.extend({
       }
     }
 
-    var data = this.get('controller.' + key)
+    var card = this.get('controller.' + key)
     var position = key.replace('board', '')
     var owner = 'Creator'
     if (key.indexOf('Opponent') != -1) {
@@ -53,8 +53,8 @@ export default Ember.View.extend({
     }
     position = position.replace(owner, '')
 
-    Ember.Logger.info('Creating mesh for card', position, owner, data);
-    util.addCard(position, owner, data)
+    Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
+    util.addCard(position, owner, card)
   },
 
   init3d: function () {
@@ -129,18 +129,18 @@ export default Ember.View.extend({
       util.createCardSpots(scene);
 
       //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
-      util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
-      util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      //util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
+      //util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R2', 'Creator', 'Pencroff/WebStorm-Live-Template');
 
-      setTimeout(function () {
-        util.attackCard('CreatorL1', 'OpponentL1');
-        setTimeout(function () {
-          util.destroyCard('L1', 'Opponent');
-        }, 2000);
+      // setTimeout(function () {
+      //   util.attackCard('CreatorL1', 'OpponentL1');
+      //   setTimeout(function () {
+      //     util.destroyCard('L1', 'Opponent');
+      //   }, 2000);
 
-      }, 2000);
+      // }, 2000);
 
 
       plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
