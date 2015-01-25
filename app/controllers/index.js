@@ -8,14 +8,40 @@ export default Ember.Controller.extend({
   Card: Ember.Object.extend({
     name: '',
     url: '',
-    /*atk: Ember.computed('stargazers_count', function(key, val) {
-      return this.get('stargazers_count') || 1
+    atk: Ember.computed('stargazers_count', function(key, val) {
+      var count = this.get('stargazers_count') || 1;
+
+      if (count > 1000) {
+        return 4;
+      }
+
+      if (count > 500) {
+        return 3;
+      }
+
+      if (count > 100) {
+        return 2;
+      }
+
+      return 1;
     }),
     def: Ember.computed('forks_count', function(key, val) {
-      return this.get('forks_count') || 1
-    }),*/
-    atk: 4,
-    def: 4,
+      var count = this.get('forks_count') || 1;
+
+      if (count > 1000) {
+        return 4;
+      }
+
+      if (count > 500) {
+        return 3;
+      }
+
+      if (count > 100) {
+        return 2;
+      }
+
+      return 1;
+    }),
     language: Ember.computed(function(key, val) {
       return val || '????';
     }),
