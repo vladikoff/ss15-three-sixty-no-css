@@ -28,4 +28,6 @@ export default Ember.Controller.extend({
   // If we are waiting for a game
   waitingForGame: false,
 
+  activeGames: 0,
+
 });

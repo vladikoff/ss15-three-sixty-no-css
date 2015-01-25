@@ -2,6 +2,11 @@ import Ember from 'ember';
 import config from '../models/game';
 
 export default Ember.Route.extend({
+  model: function() {
+    return this.store.findAll('game').then((games) => {
+      this.controllerFor('index').set('activeGames', games.get('content').length)
+    })
+  },
   actions: {
     login: function () {
       var ref = new Firebase("https://dazzling-heat-4787.firebaseio.com");

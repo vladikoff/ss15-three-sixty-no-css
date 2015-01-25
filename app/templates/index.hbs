@@ -5,7 +5,7 @@
     {{#if waitingForGame}}
       <button class="btn btn-primary btn-lg btn-block" {{action "cancel"}}>Waiting for another player...</button>
     {{else}}
-      <button class="btn btn-primary btn-lg btn-block" {{action "findMatch"}}>Find a Game</button>
+      <button class="btn btn-primary btn-lg btn-block" {{action "findMatch"}}>Find a Game ({{activeGames}} current games)</button>
     {{/if}}
   </div>
 
