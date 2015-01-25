@@ -153,14 +153,10 @@ export default Ember.Route.extend({
     // Call to set a specific board position
     setBoard: function(pos) {
       var gameCtrl = this.controllerFor('game')
+      var indexC = this.controllerFor('index')
       var username = this.controllerFor('navbar').get('username')
       var card = gameCtrl.get('lastSelectedCard')
-      Ember.Logger.info('*****');
-      Ember.Logger.info(card);
-      Ember.Logger.info(card.get('id'));
 
-
-      gameCtrl.get('deck').removeObject(card);
 
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return
@@ -171,6 +167,26 @@ export default Ember.Route.extend({
         this.store.find('game', id).then((game) => {
 
           gameCtrl.set(pos, card)
+
+
+          Ember.Logger.info();
+          Ember.Logger.info('*****');
+          Ember.Logger.info(card);
+
+          var newDeck = [];
+          indexC.get('deck').forEach(function(c){
+            try {
+              if(c.get('name') !== card.split('/')[1]){
+                Ember.Logger.info(c.get('name'), card);
+                newDeck.push(c)
+              }
+            } catch (e) {
+
+            }
+          });
+
+          indexC.set('deck', newDeck);
+
           game.set(pos, card)
           // set card HP into db as well.
           // convert position key to an hp key
