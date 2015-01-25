@@ -49,7 +49,7 @@ export default Ember.View.extend({
     }
 
     var cardId = this.get('controller.board' + key)
-    var position = key.replace(owner, '')
+    var position = key.slice(-2)
     this.get('controller').lookupCard(cardId).then((card) => {
       Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
       util.addCard(position, owner, card)
