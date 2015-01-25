@@ -45,7 +45,9 @@ export default Ember.Route.extend({
       var store = this.store;
       var {clock, turn} = gameCtrl.getProperties('clock', 'turn');
       var username = this.controllerFor('navbar').get('username');
+      var indexCtrl = this.controllerFor('index');
       var id = gameCtrl.get('id')
+      //var myRole = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
 
       // Properties we sync on every tick
       var syncProps = [
@@ -68,21 +70,17 @@ export default Ember.Route.extend({
           var thisIsCreator = game.get('id') === username;
           var creatorHp = game.get('creatorBase');
           var opponentHp = game.get('opponentBase');
-          if (opponentHp === 0 || creatorHp === 0) {
+          //if (opponentHp === 0 || creatorHp === 0) {
             // someone lost
 
             // if opponent lost and you are the creator
-            if ( (opponentHp === 0 && thisIsCreator) || (creatorHp === 0 && !thisIsCreator)) {
+            if ( indexCtrl.get('deck').length === 0) {
               // YOU WIN
-              Ember.Logger.info('You win!', 'thisIsCreator: ', thisIsCreator );
-
-            } else {
-              Ember.Logger.info('You Lost!', 'thisIsCreator: ', thisIsCreator );
-              // if creator lost and you are the creator
-              // YOU LOST
+              Ember.Logger.info('You Lost!', 'thisIsCreator: ', thisIsCreator);
+              alert('You Lose!');
             }
 
-          }
+          //}
 
           /////////////////////
 
@@ -143,12 +141,8 @@ export default Ember.Route.extend({
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
 
-      console.log(this.card, card);
-
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return
-
-      gameCtrl.get('deck').removeObject(card);
 
       SOUNDTRACK.select();
       Ember.Logger.info('selectCard');
@@ -161,6 +155,12 @@ export default Ember.Route.extend({
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
       var card = gameCtrl.get('lastSelectedCard')
+      Ember.Logger.info('*****');
+      Ember.Logger.info(card);
+      Ember.Logger.info(card.get('id'));
+
+
+      gameCtrl.get('deck').removeObject(card);
 
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return

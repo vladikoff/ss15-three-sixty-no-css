@@ -20,7 +20,7 @@ export default Ember.View.extend({
       var geometry = new THREE.BoxGeometry(30, 30, 0.1);
       var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
       mesh.rotation.y = Math.PI;
-      mesh.position.x = 20;
+      mesh.position.x = 0;
       mesh.position.y = 15;
       mesh.position.z = -80;
       this.get('scene').add(mesh);
@@ -135,7 +135,7 @@ export default Ember.View.extend({
 
       // we create a base with the name of the opposite player. if i am opponent then i attack creator
       var baseToAttackName = self.get('controller.isOpponent') ? 'creator' : 'opponent';
-      util.createBase(scene, baseToAttackName);
+      //util.createBase(scene, baseToAttackName);
       var __DEBUG = location.search.indexOf('debug') > -1;
       if (__DEBUG) {
         util.addCard('boardOpponentL2', 'neoziro/grunt-shipit');
