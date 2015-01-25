@@ -12,6 +12,8 @@
   <div class="col-xs-6 col-sm-4">
     <h2>Your Game Deck</h2>
 
+    <b>Protip:</b> <i>Click to remove</i>
+
     <h3><span>{{deck.length}}</span> of 5 <span>cards in deck</span></h3>
 
     {{deck-list removeFromDeck="removeFromDeck" action="removeFromDeck" showCurrent="showCurrent" data=deck}}
@@ -33,6 +35,10 @@
 
   <div class="col-xs-6 col-sm-4">
     <h2>Available Cards</h2>
+
+    <b>Protip:</b> <i>Click to add</i>
+
+    <h3><span>{{library.length}}</span> cards</h3>
 
     {{deck-list addToDeck="addToDeck" action="addToDeck" showCurrent="showCurrent" data=library}}
   </div>

@@ -65,7 +65,7 @@ export default Ember.Route.extend({
 
         // If no existing deck, get first 8 cards for a deck
         if (!Array.isArray(deck)) {
-          deck = library.splice(0, 8);
+          deck = library.splice(0, 5);
 
           // Save the deck.
           localStorage.deck = JSON.stringify(deck.toArray().map(function(i) {
