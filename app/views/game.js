@@ -123,12 +123,7 @@ export default Ember.View.extend({
         scene._clickable_objects.push(object);
 
       }
-      // var controller = self.get('controller');
-      // var navbar = controller.controllerFor('navbar');
-      // var gameCtrl = controller.controllerFor('game');
-      // var app = controller.controllerFor('application');
 
-      //util.controller = self.get('controller')
       util.createPlanes(scene);
       util.createCardSpots(scene);
 
@@ -220,19 +215,14 @@ export default Ember.View.extend({
       var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
       var intersects = raycaster.intersectObjects(scene._clickable_objects);
 
-      // Set a board position and have it sync
-      self.get('controller').send('setBoard', 'boardOpponentL1', 'neoziro/grunt-shipit')
-
       if (intersects.length > 0) {
         //controls.enabled = false;
-        SELECTED = intersects[0].object;
-        console.log(SELECTED);
-        console.log(CURRENT_CARD);
 
-        // if we can place
-        if (SELECTED.spots && window.CURRENT_CARD) {
-         // util.addCard('L1', 'opponent', 'neoziro/grunt-shipit');
-        }
+        // TODO: Check if a card, not a grid space was clicked
+
+        var direction = intersects[0].object._direction;
+        direction = direction.slice(0, 1).toUpperCase() + '1'
+        self.get('controller').send('setBoard', 'boardCreator' + direction, 'neoziro/grunt-shipit')
 
         container.style.cursor = 'move';
       }

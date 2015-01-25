@@ -39,6 +39,7 @@ export default Ember.Route.extend({
       var store = this.store;
       var {clock, turn} = gameCtrl.getProperties('clock', 'turn');
       var username = this.controllerFor('navbar').get('username');
+      var id = gameCtrl.get('id')
 
       // Properties we sync on every tick
       var syncProps = [
@@ -46,39 +47,41 @@ export default Ember.Route.extend({
         'opponentHealth',
       ].concat(gameCtrl.get('boardKeys'))
 
-      var p = store.find('game', gameCtrl.get('id')).then((game) => {
-        var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
-        var delta = moment().utc() - game.get('lastTurnSwitch')
-        //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
+      if (id) {
+        var p = store.find('game', id).then((game) => {
+          var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
+          var delta = moment().utc() - game.get('lastTurnSwitch')
+          //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
-        gameCtrl.set('opponent', opponent)
-        syncProps.forEach((p) => {
-          gameCtrl.set(p, game.get(p))
-        })
+          gameCtrl.set('opponent', opponent)
+          syncProps.forEach((p) => {
+            gameCtrl.set(p, game.get(p))
+          })
 
-        // Is it our turn?
-        if (game.get('turn') === username) {
-          // Has our time expired?
-          if (delta >= clockMax) {
-            Ember.Logger.info('Switching turns...');
-            game.set('lastTurnSwitch', moment().utc())
-            game.set('turn', opponent)
+          // Is it our turn?
+          if (game.get('turn') === username) {
+            // Has our time expired?
+            if (delta >= clockMax) {
+              Ember.Logger.info('Switching turns...');
+              game.set('lastTurnSwitch', moment().utc())
+              game.set('turn', opponent)
+            }
+            gameCtrl.set('turn', true)
+            gameCtrl.set('opponentProbablyLeft', false)
+          } else {
+            // Has the other user's time expired?
+            if (delta >= clockMax) {
+              gameCtrl.set('opponentProbablyLeft', true)
+            }
+            gameCtrl.set('turn', false)
           }
-          gameCtrl.set('turn', true)
-          gameCtrl.set('opponentProbablyLeft', false)
-        } else {
-          // Has the other user's time expired?
-          if (delta >= clockMax) {
-            gameCtrl.set('opponentProbablyLeft', true)
-          }
-          gameCtrl.set('turn', false)
-        }
 
-        gameCtrl.set('clock', parseInt((clockMax - delta) / 1000))
+          gameCtrl.set('clock', parseInt((clockMax - delta) / 1000))
 
-        return game.save();
-      });
-      promises.push(p);
+          return game.save();
+        });
+        promises.push(p);
+      }
 
       Ember.RSVP.all(promises).then(() => {
         Ember.run.later(() => {
@@ -102,12 +105,16 @@ export default Ember.Route.extend({
 
     // Call to set a specific board position
     setBoard: function(pos, card) {
+      Ember.Logger.info('Setting card: ', pos, card)
       var gameCtrl = this.controllerFor('game')
+      var id = gameCtrl.get('id')
       gameCtrl.set(pos, card)
-      this.store.find('game', gameCtrl.get('id')).then((game) => {
-        game.set(pos, card)
-        return game.save()
-      })
+      if (id) {
+        this.store.find('game', gameCtrl.get('id')).then((game) => {
+          game.set(pos, card)
+          return game.save()
+        })
+      }
     },
 
   }
