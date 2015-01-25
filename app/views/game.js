@@ -81,6 +81,7 @@ export default Ember.View.extend(GHMixin, {
       var gameCtrl = controller.controllerFor('game');
       var app = controller.controllerFor('application');
 
+      util.controller = self.get('controller')
       util.getAvatar(app, navbar, gameCtrl);
       util.createPlanes(scene, objects);
       util.createCardSpots(scene);

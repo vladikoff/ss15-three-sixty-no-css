@@ -1,4 +1,5 @@
 export default {
+  controller: null,
   createPlanes: function (scene, objects) {
     var pos = [
       // YOURS
@@ -79,12 +80,12 @@ export default {
 
 
     window.GAME = game;
-    var username = navbar.get('username');
-    if (username === game.get('id')) {
-      username = game.get('opponent');
-    }
+    // var username = navbar.get('username');
+    // if (username === game.get('id')) {
+    //   username = game.get('opponent');
+    // }
 
-    app.gh('users/' + username).then((user) => {
+    this.controller.gh('users/' + this.controller.get('opponent')).then((user) => {
       image.src = user.avatar_url;
     });
   },

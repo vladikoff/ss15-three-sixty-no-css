@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import GHMixin from '../mixins/gh';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(GHMixin, {
   // id of the game we are playing
   id: null,
 
