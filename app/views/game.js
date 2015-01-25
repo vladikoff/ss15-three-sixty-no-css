@@ -45,16 +45,17 @@ export default Ember.View.extend({
       }
     }
 
-    var card = this.get('controller.' + key)
+    var cardId = this.get('controller.' + key)
     var position = key.replace('board', '')
     var owner = 'Creator'
     if (key.indexOf('Opponent') != -1) {
       owner = 'Opponent'
     }
     position = position.replace(owner, '')
-
-    Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
-    util.addCard(position, owner, card)
+    this.get('controller').lookupCard(cardId).then((card) => {
+      Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
+      util.addCard(position, owner, card)
+    })
   },
 
   init3d: function () {

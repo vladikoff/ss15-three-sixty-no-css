@@ -1,14 +1,18 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ['navbar'],
+  needs: ['navbar', 'index'],
   username: Ember.computed.alias('controllers.navbar.username'),
+  cards: Ember.computed.alias('controllers.index.library'),
 
   // id of the game we are playing
   id: null,
 
   // Last selected card
   lastSelectedCard: null,
+  lookupCard: function(id) {
+    return Ember.RSVP.resolve(this.get('cards').findBy('id', id))
+  },
 
   // name of your opponent
   opponent: null,
