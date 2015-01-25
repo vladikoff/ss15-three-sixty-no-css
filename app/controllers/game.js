@@ -8,6 +8,9 @@ export default Ember.Controller.extend({
   opponent: null,
   opponentAvatarUrl: null,
 
+  // Whether this player is the opponent or not
+  isOpponent: false,
+
   // Did the opponent probably leave?
   opponentProbablyLeft: false,
 

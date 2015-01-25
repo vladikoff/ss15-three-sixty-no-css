@@ -49,6 +49,7 @@ export default Ember.Route.extend({
 
       if (id) {
         var p = store.find('game', id).then((game) => {
+          gameCtrl.set('isOpponent', !!(game.get('id') === username))
           var opponent = (game.get('id') === username) ? game.get('opponent') : game.get('id');
           var delta = moment().utc() - game.get('lastTurnSwitch')
           //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
@@ -110,7 +111,8 @@ export default Ember.Route.extend({
       var id = gameCtrl.get('id')
       gameCtrl.set(pos, card)
       if (id) {
-        this.store.find('game', gameCtrl.get('id')).then((game) => {
+        this.store.find('game', id).then((game) => {
+          Ember.Logger.info('Saving in db...')
           game.set(pos, card)
           return game.save()
         })

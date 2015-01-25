@@ -43,7 +43,7 @@ export default Ember.View.extend({
   onBoardChange: function(controller, key) {
     if (!this.get('scene')) return
     var data = controller.get(key)
-    Ember.Logger.info('Adding Card', data);
+    Ember.Logger.info('Adding Card', key, data);
     var destination = window.POSITIONS[key];
     destination.data = data;
 
@@ -222,7 +222,8 @@ export default Ember.View.extend({
 
         var direction = intersects[0].object._direction;
         direction = direction.slice(0, 1).toUpperCase() + '1'
-        self.get('controller').send('setBoard', 'boardCreator' + direction, 'neoziro/grunt-shipit')
+        var owner = self.get('controller.isOpponent') ? 'Creator' : 'Opponent'
+        self.get('controller').send('setBoard', 'board' + owner + direction, 'neoziro/grunt-shipit' + Math.random())
 
         container.style.cursor = 'move';
       }
