@@ -1,10 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
-  ghToken: Ember.computed(function(key, val) {
-    // Save to local storage?
-    return val
-  }),
+  needs: ['application'],
+  ghToken: Ember.computed.alias('controllers.application.ghToken'),
   gh: function (api) {
     return new Ember.RSVP.Promise((resolve, reject) => {
       Ember.$.ajax({
