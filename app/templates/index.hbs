@@ -9,19 +9,31 @@
     {{/if}}
   </div>
 
-  <h1>Current Card Deck</h1>
-  <ul class="cards">
-    {{#each card in deck}}
-      {{a-card data=card action="deselect"}}
-    {{/each}}
-  </ul>
+  <div class="col-xs-6 col-sm-4">
+    <h2>Your Deck</h2>
 
-  <h2>Your Card Collection</h2>
-  <ul class="cards">
-    {{#each card in library}}
-      {{a-card data=card action="select"}}
-    {{/each}}
-  </ul>
+    {{deck-list removeFromDeck="removeFromDeck" action="removeFromDeck" showCurrent="showCurrent" data=deck}}
+  </div>
+
+  <div class="col-xs-6 col-sm-4">
+    <h2>Card Preview</h2>
+
+    <div class="preview">
+      {{#if current}}
+        {{big-card data=current}}
+      {{else}}
+        <div class="none-selected">
+          <h3>No card selected</h3>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="col-xs-6 col-sm-4">
+    <h2>Available Cards</h2>
+
+    {{deck-list addToDeck="addToDeck" action="addToDeck" showCurrent="showCurrent" data=library}}
+  </div>
 
 {{else}}
 
@@ -89,3 +101,19 @@
   </div>
 
 {{/if}}
+<!--
+<div class="ember-view big-card">
+  <div class="inner">
+    <div class="name"><a href="https://github.com/maryrosecook/gitlet" data-bindattr-549="549" target="_blank">gitlet</a></div>
+    <div class="img"><img src="https://avatars.githubusercontent.com/u/2716?v=3" data-bindattr-551="551"></div>
+    <div class="owner">maryrosecook</div>
+    <div class="type">JavaScript</div>
+    <div class="desc">Git implemented in JavaScript</div>
+    <div class="stats">
+      <div class="stats-atk">681 <span>HIT</span></div>
+      <div class="stats-mana"> <span>MANA</span></div>
+      <div class="stats-def">29 <span>HP</span></div>
+    </div>
+  </div>
+</div>
+-->

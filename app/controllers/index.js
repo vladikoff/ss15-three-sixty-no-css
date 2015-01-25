@@ -24,6 +24,32 @@ export default Ember.Controller.extend({
   // All the cards you have available
   library: [],
 
+  // The current card
+  current: null,
+
+  actions: {
+    showCurrent: function(data) {
+      this.set('current', data);
+    },
+
+    addToDeck: function(data) {
+      this.get('deck').pushObject(data);
+      this.get('library').removeObject(data);
+
+      var deck = this.get('deck');
+
+      // Save the deck.
+      localStorage.deck = JSON.stringify(deck.toArray().map(function(i) {
+        return i.id;
+      }));
+    },
+
+    removeFromDeck: function(data) {
+      this.get('deck').removeObject(data);
+      this.get('library').pushObject(data);
+    }
+  },
+
   // Cards in your deck
   deck: Ember.computed.alias('controllers.game.deck'),
 

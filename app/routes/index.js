@@ -18,7 +18,7 @@ export default Ember.Route.extend({
           window._JRR_TOLKIEN = authData.github.accessToken;
           //this.controllerFor('application').set('ghToken', authData.github.accessToken);
           console.log("Authenticated successfully with payload:", authData);
-          this.controllerFor('application').gh('users/' + username).then((user) =>{
+          this.controllerFor('application').gh('users/' + username, {}).then((user) =>{
             user.id = user.login;
             this.store.createRecord('user', user).save().then(() => {
               this.controllerFor('navbar').set('user', user);
@@ -34,7 +34,22 @@ export default Ember.Route.extend({
       var library = this.controllerFor('index').get('library')
       var deck = this.controllerFor('index').get('deck') // TODO: MOVE THIS??
 
-      this.controllerFor('application').gh('users/' + username + '/starred').then((stars) =>{
+      function parseDeckFromStore(library) {
+        var retVal = Ember.A(JSON.parse(localStorage.deck)).map(function(id) {
+          return library.find(function(item, index) {
+            if (item && item.id === id) {
+              library.splice(index, index+1);
+              return true;
+            }
+
+            return false;
+          });
+        });
+
+        return retVal.filter(Boolean);
+      }
+
+      this.controllerFor('application').gh('users/' + username + '/starred', [], true).then((stars) =>{
         stars.forEach((star) =>{
           star.id = star.full_name;
           star.user = this.store.find('user', username);
@@ -42,9 +57,27 @@ export default Ember.Route.extend({
           library.pushObject(Card.create(star))
         });
 
-        // Get first 8 cards for a deck
-        var deck = library.slice(0, 8)
-        this.controllerFor('game').set('deck', deck);
+        var deck = null;
+
+        if (localStorage.deck) {
+          deck = parseDeckFromStore(library);
+        }
+
+        // If no existing deck, get first 8 cards for a deck
+        if (!Array.isArray(deck)) {
+          deck = library.splice(0, 8);
+
+          // Save the deck.
+          localStorage.deck = JSON.stringify(deck.toArray().map(function(i) {
+            return i.id;
+          }));
+        }
+
+        this.controllerFor('index').set('deck', deck);
+
+        // Update the library.
+        library.setObjects(library);
+        deck.setObjects(deck);
       })
     },
     findMatch: function () {
@@ -138,6 +171,9 @@ export default Ember.Route.extend({
     },
     deselect: function(card) {
       this.controllerFor('game').get('deck').removeObject(card)
+    },
+    setCurrent: function() {
+      console.log(arguments);
     },
   },
 });

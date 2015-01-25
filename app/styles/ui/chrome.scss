@@ -8,7 +8,7 @@ html, body {
 }
 
 .navbar .pull-right {
-  margin-top: 4px; 
+  margin-top: 4px;
 }
 
 .btn-primary {
@@ -19,6 +19,10 @@ html, body {
 .btn-primary:hover {
   background-color: #514A45;
   border-color: rgba(0, 0, 0, 0);
+}
+
+.preview {
+  text-align: center;
 }
 
 .btn-action {
