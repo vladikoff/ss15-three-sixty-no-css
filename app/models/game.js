@@ -20,6 +20,6 @@ export default DS.Model.extend({
   boardOpponentC2: DS.attr('string', { defaultValue: '' }),
   boardOpponentR1: DS.attr('string', { defaultValue: '' }),
   boardOpponentR2: DS.attr('string', { defaultValue: '' }),
-  creatorHealth: 10,
-  opponentHealth: 10
+  creatorHealth: DS.attr('number', { defaultValue: function() { return 10 } }),
+  opponentHealth: DS.attr('number', { defaultValue: function() { return 10 } })
 });

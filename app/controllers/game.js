@@ -63,7 +63,4 @@ export default Ember.Controller.extend({
     'boardOpponentR1',
     'boardOpponentR2',
   ],
-
-  creatorHealth: 10,
-  opponentHealth: 10,
 });
