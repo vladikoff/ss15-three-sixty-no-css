@@ -123,5 +123,13 @@ export default Ember.Route.extend({
         this.controllerFor('index').set('waitingForGame', false)
       })
     },
+
+    // Select deselect cards
+    select: function(card) {
+      this.controllerFor('game').get('deck').pushObject(card)
+    },
+    deselect: function(card) {
+      this.controllerFor('game').get('deck').removeObject(card)
+    },
   },
 });

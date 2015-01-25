@@ -1,7 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ['game'],
+  needs: ['game', 'navbar'],
+
+  username: Ember.computed.alias('controllers.navbar.username'),
 
   Card: Ember.Object.extend({
     name: '',

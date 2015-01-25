@@ -1,6 +1,6 @@
 {{outlet}}
 
-{{#if deck}}
+{{#if username}}
   <div class="well find-game-well">
     {{#if waitingForGame}}
       <button class="btn btn-primary btn-lg btn-block" {{action "cancel"}}>Waiting for another player...</button>
@@ -12,14 +12,14 @@
   <h1>Current Card Deck</h1>
   <ul class="cards">
     {{#each card in deck}}
-      {{a-card data=card}}
+      {{a-card data=card action="deselect"}}
     {{/each}}
   </ul>
 
   <h2>Your Card Collection</h2>
   <ul class="cards">
     {{#each card in library}}
-      {{a-card data=card}}
+      {{a-card data=card action="select"}}
     {{/each}}
   </ul>
 

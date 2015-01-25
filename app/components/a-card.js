@@ -14,6 +14,7 @@ export default Ember.Component.extend({
       window.CURRENT_CARD = cardData;
 
     }
+    this.sendAction('action', this.get('data'))
     this.toggleProperty('selected');
   },
 });
