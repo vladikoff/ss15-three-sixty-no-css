@@ -140,6 +140,11 @@ export default Ember.Route.extend({
 
     // When a card is selected
     selectCard: function(card) {
+      var gameCtrl = this.controllerFor('game')
+      var username = this.controllerFor('navbar').get('username')
+      // Not your turn or no selected card
+      if (gameCtrl.get('turn') !== username || !card) return
+
       SOUNDTRACK.select();
       Ember.Logger.info('selectCard');
       util.animationBoardSelection();
@@ -159,6 +164,7 @@ export default Ember.Route.extend({
       if (id) {
         Ember.Logger.info('Save card to ctrl/db: ', pos, card)
         this.store.find('game', id).then((game) => {
+
           gameCtrl.set(pos, card)
           game.set(pos, card)
           // set card HP into db as well.

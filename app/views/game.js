@@ -279,6 +279,7 @@ export default Ember.View.extend({
 
               util.stopAttackSelectionMode();
               util.stopAllOppositeCardsAttackable();
+              self.get('controller').send('endTurn')
             }
           }
 
