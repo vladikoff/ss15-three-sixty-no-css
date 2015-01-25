@@ -31,19 +31,20 @@ export default Ember.View.extend({
   // Add board keys
   dynamicallyAddBoardKeyObservers: Ember.on('didInsertElement', function() {
     this.get('controller.boardKeys').forEach((key) => {
+      Ember.Logger.info('Creating Observer for boardKeys', key);
       Ember.addObserver(this.get('controller'), key, this, this.onBoardChange)
     })
 
     this.get('controller.hpKeys').forEach((key) => {
+      Ember.Logger.info('Creating Observer for hpKey', key);
       Ember.addObserver(this.get('controller'), key, this, this.onHpChange)
     })
 
   }),
   onHpChange: function (controller, key) {
-    var cardThatWasAttacked = key;
+    var cardThatWasAttacked = 'board' + key.slice(2);
     Ember.Logger.info('Received Attack:', cardThatWasAttacked);
-    //util.attackCard(window.__SELECTED_CARD, spot);
-    util.cardSetHp(cardThatWasAttacked, 0, self.get('controller.isOpponent') ? 'creator' : 'opponent');
+    util.cardSetHp(cardThatWasAttacked,  this.get('controller.' + key), this.get('controller.isOpponent') ? 'creator' : 'opponent');
   },
 
   onBoardChange: function(controller, key) {
@@ -246,9 +247,6 @@ export default Ember.View.extend({
           var spot = intersects[0].object.name;
           // IF I CLICKED A CARD THAT MATCHES MY ROLE (Opponent or Creator) THEN SELECT IT.
           var myRole = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
-          if (myRole === 'Opponent') {
-
-          }
 
           // the card has my role in it
           // TODO: disable this if not my turn....!!!!!!!!!!!!!!!!!!!
@@ -271,11 +269,11 @@ export default Ember.View.extend({
 
               /// Animations
               util.attackCard(window.__SELECTED_CARD, spot);
-              var spotHpData = spot.slice(5);
-              var currentHp = self.get('controller.' + spotHpData);
+              var spotHpKey = 'controller.hp' + spot.slice(5);
+              var currentHp = self.get(spotHpKey);
               currentHp--;
-              //self.set('controller.' + spotHpData, currentHp);
-              self.get('controller').send('setHP', spotHpData, currentHp)
+              Ember.Logger.info('spotHpKey:', spotHpKey, 'currentHp:', currentHp);
+              self.get('controller').send('setHP', spotHpKey, currentHp)
 
               util.cardSetHp(spot, currentHp, self.get('controller.isOpponent') ? 'creator' : 'opponent');
 

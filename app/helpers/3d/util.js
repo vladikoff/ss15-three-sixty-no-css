@@ -172,6 +172,7 @@ export default {
            util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
    */
   addCard: function (key, card, role) {
+
     var scene = window.SCENE;
     if (scene) {
       var debug = location.search.indexOf('debug') > -1;
@@ -201,10 +202,10 @@ export default {
 
       object.name = key;
 
-      var dmgTxt = text.createDmgText('2 DMG');
+      var dmgTxt = text.createDmgText(card.get('attack') + ' DMG');
       object.add(dmgTxt);
 
-      var hpTxt = text.createHpText('2 HP');
+      var hpTxt = text.createHpText(card.get('hp') + ' HP');
       hpTxt.name = 'hp';
       object.add(hpTxt);
 

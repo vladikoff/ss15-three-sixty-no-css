@@ -50,7 +50,7 @@ export default Ember.Route.extend({
       var syncProps = [
         'opponentBase',
         'creatorBase',
-      ].concat(gameCtrl.get('boardKeys'))
+      ].concat(gameCtrl.get('boardKeys')).concat(gameCtrl.get('hpKeys'))
 
       if (id) {
         var p = store.find('game', id).then((game) => {
@@ -162,6 +162,7 @@ export default Ember.Route.extend({
           var hpKey = 'hp' + pos.slice(5)
           game.set(hpKey, 4);
 
+          this.send('endTurn');
 
           return game.save()
         })
@@ -196,8 +197,10 @@ export default Ember.Route.extend({
       }
     },
 
-    setHP: function(position, hp) {
+    setHP: function(contKey, hp) {
+      var position = contKey.slice(11);
       Ember.Logger.info('Calling setHP', position, hp);
+
 
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
@@ -206,6 +209,7 @@ export default Ember.Route.extend({
       if (id) {
         this.store.find('game', id).then((game) => {
           game.set(position, hp)
+          Ember.Logger.info('Saving hp:', hp, 'to position', position);
           return game.save()
         })
       } else {
