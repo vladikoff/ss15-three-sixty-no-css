@@ -67,6 +67,24 @@ export default {
 
     });
   },
+  /**
+   * Create a base that can be attacked to win the game.
+   */
+  createBase: function(scene) {
+    var geometry = new THREE.SphereGeometry( 15, 32, 32 );
+    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
+    object.material.ambient = object.material.color;
+    object.position.x = 0;
+    object.position.y = 2;
+    object.position.z = -60;
+    object._type = 'base';
+    object.name = 'opponentBase';
+
+    var dmgTxt = text.createBaseText('10 HP');
+    object.add(dmgTxt);
+    scene.add(object);
+    scene._clickable_objects.push(object);
+  },
 
   createCardSpots: function (scene) {
     window.POSITIONS = {

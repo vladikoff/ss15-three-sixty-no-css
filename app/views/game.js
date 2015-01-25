@@ -20,7 +20,7 @@ export default Ember.View.extend({
       var geometry = new THREE.BoxGeometry(30, 30, 0.1);
       var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
       mesh.rotation.y = Math.PI;
-      mesh.position.x = 0;
+      mesh.position.x = 20;
       mesh.position.y = 15;
       mesh.position.z = -80;
       this.get('scene').add(mesh);
@@ -124,8 +124,10 @@ export default Ember.View.extend({
 
       }
 
+      // create the 6 planes that the game is played on
       util.createPlanes(scene);
       util.createCardSpots(scene);
+      util.createBase(scene);
 
       //util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
       util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
