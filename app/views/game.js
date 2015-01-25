@@ -84,6 +84,19 @@ export default Ember.View.extend({
       util.createPlanes(scene, objects);
       util.createCardSpots(scene);
 
+      util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
+      util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+      util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+
+      setTimeout(function () {
+        util.attackCard('CreatorR1', 'OpponentL1');
+        setTimeout(function () {
+          util.destroyCard('L1', 'Opponent');
+        }, 2000);
+
+      }, 2000);
+
+
       plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
         color: 0x000000,
         opacity: 0.25,
@@ -164,7 +177,7 @@ export default Ember.View.extend({
 
         // if we can place
         if (SELECTED.spots && window.CURRENT_CARD) {
-          util.addCard(SELECTED, CURRENT_CARD);
+         // util.addCard('L1', 'opponent', 'neoziro/grunt-shipit');
         }
 
         container.style.cursor = 'move';
@@ -182,9 +195,10 @@ export default Ember.View.extend({
     }
 
 //
-    function animate() {
+    function animate(time) {
       requestAnimationFrame(animate);
       render();
+      TWEEN.update(time);
     }
 
     function render() {

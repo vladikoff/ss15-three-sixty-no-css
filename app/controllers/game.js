@@ -11,20 +11,6 @@ export default Ember.Controller.extend({
   opponentProbablyLeft: false,
 
   deck: null,
-  map: {
-    my0: null,
-    my1: null,
-    my2: null,
-    my3: null,
-    my4: null,
-    my5: null,
-    opponent0: null,
-    opponent1: null,
-    opponent2: null,
-    opponent3: null,
-    opponent4: null,
-    opponent5: null
-  },
 
   // How many seconds until this turn ends
   clock: 0,

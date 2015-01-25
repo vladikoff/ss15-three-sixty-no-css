@@ -40,7 +40,7 @@ export default {
     ];
 
     pos.forEach(position => {
-      var geometry = new THREE.BoxGeometry( 30, 0.1, 120 );
+      var geometry = new THREE.BoxGeometry(30, 0.1, 120);
       var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: position.c}));
       object.material.ambient = object.material.color;
       object.position.x = position.x;
@@ -48,10 +48,6 @@ export default {
       object.position.z = position.z;
       object.castShadow = true;
       object.receiveShadow = true;
-      object.spots = {
-        place0: null,
-        place1: null
-      };
       scene.add(object);
 
       if (position.add) {
@@ -72,8 +68,8 @@ export default {
       console.log('loaded img');
       var texture = new THREE.Texture(image);
       texture.needsUpdate = true;
-      var geometry = new THREE.BoxGeometry( 30, 30, 0.1 );
-      var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+      var geometry = new THREE.BoxGeometry(30, 30, 0.1);
+      var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
       mesh.rotation.y = Math.PI;
       mesh.position.x = 0;
       mesh.position.y = 15;
@@ -88,100 +84,140 @@ export default {
       username = game.get('opponent');
     }
 
-    app.gh('users/' + username).then((user) =>{
+    app.gh('users/' + username).then((user) => {
       image.src = user.avatar_url;
     });
   },
 
   createCardSpots: function (scene) {
-    var pos = [
-      // YOURS
-      {
-        x: 0,
-        z: 20,
-      },
+    window.POSITIONS = {
+      boardCreatorL1:
       {
         x: -25,
         z: 20,
       },
+      boardCreatorL2: {
+        x: -25,
+        z: 35,
+      },
+      boardCreatorC1:
       {
+        x: 0,
+        z: 20,
+      },
+      boardCreatorC2: {
+        x: 0,
+        z: 35,
+      },
+      boardCreatorR1: {
         x: 25,
         z: 20,
       },
-      {
-        x: 0,
-        z: 35,
-      },
-      {
-        x: -25,
-        z: 35,
-      },
-      {
+      boardCreatorR2: {
         x: 25,
         z: 35,
       },
 
-/////////////////////
-      {
-        x: 0,
-        z: -5,
-      },
-      {
-        x: -25,
-        z: -5,
-      },
+      boardOpponentL1:
       {
         x: 25,
         z: -5,
       },
-      {
-        x: 0,
-        z: -20,
-      },
-      {
-        x: -25,
-        z: -20,
-      },
-      {
+      boardOpponentL2: {
         x: 25,
         z: -20,
       },
+      boardOpponentC1:
+      {
+        x: 0,
+        z: -5,
+      },
+      boardOpponentC2: {
+        x: 0,
+        z: -20,
+      },
+      boardOpponentR1: {
+        x: -25,
+        z: -5,
+      },
+      boardOpponentR2: {
+        x: -25,
+        z: -20,
+      }
 
-    ];
+
+    };
 
     var objects = [];
-
-    pos.forEach(position => {
-      var geometry = new THREE.BoxGeometry( 5, 5, 5);
+/*
+    Object.keys(window.POSITIONS).forEach(position => {
+      var item = window.POSITIONS[position];
+      var geometry = new THREE.BoxGeometry(5, 5, 5);
       var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xD25025}));
-      object.position.x = position.x;
+      object.position.x = item.x;
       object.position.y = 10;
-      object.position.z = position.z;
+      object.position.z = item.z;
       scene.add(object);
       //objects.push(object);
 
-    });
+    });*/
 
     return objects;
 
   },
-  addCard: function (selected, cardData) {
+  /**
+   *       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
+           util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+   */
+  addCard: function (position, owner, data) {
     var scene = window.SCENE;
     if (scene) {
-      Ember.Logger.info('Adding Card', cardData);
+      Ember.Logger.info('Adding Card', data);
+      var destination = window.POSITIONS['board' + owner + position];
+      destination.data = data;
 
-      var spot = selected.spots.place0;
-      // if place0 taken
-      if (spot) {
-        if (selected.spots.place1) {
-          throw new Error('No Space Left');
-        }
-        spot = selected.spots.place1;
-      }
+      var geometry = new THREE.BoxGeometry(5, 5, 5);
+      var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xD25025}));
+      object.position.x = destination.x;
+      object.position.y = 10;
+      object.position.z = destination.z;
+      object.name = 'board' + owner + position;
+      scene.add(object);
+
+
     }
+  },
+  attackCard: function (source, destination) {
+    var scene = window.SCENE;
+
+    var origSource = window.POSITIONS['board' + source];
+
+    var sourceObject = scene.getObjectByName('board' + source);
+    var destinationObject = scene.getObjectByName('board' + destination);
+
+    var cameraOrigPos = window.CAMERA.position;
+
+    var tween = new TWEEN.Tween(sourceObject.position)
+      .to({x: destinationObject.position.x, z: destinationObject.position.z }, 500)
+      .easing(TWEEN.Easing.Quadratic.Out);
+
+    var tweenBack = new TWEEN.Tween(sourceObject.position)
+      .to({x: origSource.x, z: origSource.z }, 1000);
+
+    tween.chain(tweenBack);
+    tween.start();
+  },
+  destroyCard: function (position, owner) {
+    var scene = window.SCENE;
+    Ember.Logger.info('Removing Card', 'board' + owner + position);
+    var sourceObject = scene.getObjectByName('board' + owner + position);
+
+    new TWEEN.Tween(sourceObject.position)
+      .to({x: 200, y: 200, rotation: 0}, 3000)
+      .easing(TWEEN.Easing.Elastic.InOut)
+      .onComplete(function (params) {
+        scene.remove(sourceObject);
+      }).start();
   }
-
-
-
 }
 
