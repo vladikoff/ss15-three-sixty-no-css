@@ -196,7 +196,22 @@ export default Ember.Route.extend({
       }
     },
 
+    setHP: function(position, hp) {
+      Ember.Logger.info('Calling setHP', position, hp);
 
+      var gameCtrl = this.controllerFor('game')
+      var username = this.controllerFor('navbar').get('username')
+
+      var id = gameCtrl.get('id')
+      if (id) {
+        this.store.find('game', id).then((game) => {
+          game.set(position, hp)
+          return game.save()
+        })
+      } else {
+        Ember.Logger.warn('No Game Found');
+      }
+    },
 
   }
 });

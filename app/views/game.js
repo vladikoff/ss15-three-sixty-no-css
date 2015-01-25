@@ -274,7 +274,8 @@ export default Ember.View.extend({
               var spotHpData = spot.slice(5);
               var currentHp = self.get('controller.' + spotHpData);
               currentHp--;
-              self.set('controller.' + spotHpData, currentHp);
+              //self.set('controller.' + spotHpData, currentHp);
+              self.get('controller').send('setHP', spotHpData, currentHp)
 
               util.cardSetHp(spot, currentHp, self.get('controller.isOpponent') ? 'creator' : 'opponent');
 
