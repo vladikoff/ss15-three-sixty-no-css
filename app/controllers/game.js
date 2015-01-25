@@ -13,6 +13,7 @@ export default Ember.Controller.extend({
   // Last selected card
   lastSelectedCard: null,
   lookupCard: function(id) {
+    if (!id) return Ember.RSVP.reject()
     var card = this.get('cards').findBy('id', id)
     if (card) return Ember.RSVP.resolve(card)
     var gh = this.get('gh')
