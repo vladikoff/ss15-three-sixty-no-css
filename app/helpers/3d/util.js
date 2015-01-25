@@ -85,6 +85,7 @@ export default {
     object.name = 'opponentBase';
 
     var dmgTxt = text.createBaseText('10 HP');
+    dmgTxt.name = 'hp';
     object.add(dmgTxt);
     scene.add(object);
     scene._clickable_objects.push(object);
@@ -195,7 +196,9 @@ export default {
 
       var dmgTxt = text.createDmgText('2 DMG');
       object.add(dmgTxt);
+
       var hpTxt = text.createHpText('2 HP');
+      hpTxt.name = 'hp';
       object.add(hpTxt);
 
       var image = new Image();
@@ -334,7 +337,7 @@ export default {
   },
   animationBoardSelection: function () {
     this.stopBoardSelection();
-    
+
     if (window.__PLACEHOLDER_MESHES) {
       window.__PLACEHOLDER_MESHES.forEach(function (p) {
         var resultTween = tweenOpacity(p);
@@ -348,6 +351,33 @@ export default {
         if (p.__tween) p.__tween.stop();
       })
     }
+  },
+  /**
+   * Decrease HP of a thing in game.
+   * @param spot
+   */
+  cardSetHp: function (spot, hp) {
+    var newText = hp || '0';
+    var scene = window.SCENE;
+    var sourceObject = scene.getObjectByName(spot);
+
+    if (sourceObject) {
+      var hp = sourceObject.getObjectByName('hp');
+      sourceObject.remove(hp);
+
+      var hpTxt = null;
+      if (spot === 'opponentBase') {
+        hpTxt = text.createBaseText(newText + ' HP');
+      } else {
+        hpTxt = text.createHpText(newText + ' HP');
+      }
+
+      if (hpTxt) {
+        hpTxt.name = 'hp';
+        sourceObject.add(hpTxt);
+      }
+    }
+
   }
 }
 

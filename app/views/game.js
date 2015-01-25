@@ -252,6 +252,9 @@ export default Ember.View.extend({
             // IF I Have a card Selected, then I can choose a card to attack
             if (window.__SELECTED_CARD) {
               util.attackCard(window.__SELECTED_CARD, spot);
+
+              util.cardSetHp(spot, 0);
+
               util.stopAttackSelectionMode();
               util.stopAllOppositeCardsAttackable();
             }

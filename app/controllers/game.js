@@ -62,5 +62,5 @@ export default Ember.Controller.extend({
     'boardOpponentC2',
     'boardOpponentR1',
     'boardOpponentR2',
-  ],
+  ]
 });
