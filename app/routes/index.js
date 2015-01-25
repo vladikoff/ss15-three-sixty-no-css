@@ -78,6 +78,7 @@ export default Ember.Route.extend({
         // Couldnt find a game, make the player available to others
         if (!foundGame) {
           return this.store.createRecord('game', { id: username }).save().then(() => {
+            this.controllerFor('index').set('waitingForGame', true);
             this.send('waitForMatch')
           })
         }
@@ -98,7 +99,6 @@ export default Ember.Route.extend({
     },
     waitForMatch: function() {
       var username = this.controllerFor('navbar').get('username');
-      this.controllerFor('index').set('waitingForGame', true);
       Ember.Logger.info('Waiting for a game...');
       this.store.find('game', username).then((g) => {
         // You have an opponent now
