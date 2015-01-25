@@ -113,7 +113,7 @@ export default Ember.Route.extend({
     setBoard: function(pos) {
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
-      var card = gameCtrl.get('lastSelectedCard')
+      var card = gameCtrl.get('lastSelectedCard.id')
 
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return
