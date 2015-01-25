@@ -72,8 +72,12 @@ export default Ember.Route.extend({
             // Cant play against yourself
             if (username === next.get('id')) return false
             // If player is already player but not yourself
-            if (next.get('opponent') !== '' && next.get('opponent') === username) return false
-            return next
+            if (next.get('opponent') === '') {
+              return next
+            } else {
+              return false
+            }
+
           } else {
             return cur
           }
