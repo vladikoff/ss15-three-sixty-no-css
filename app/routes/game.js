@@ -32,6 +32,7 @@ export default Ember.Route.extend({
 
     // THE MAIN GAME TICK
     tick: function() {
+      this.store.unloadAll('game');
       var interval = 1000
       var clockMax = 30 * 1000 // in seconds
       var promises = [];
@@ -53,7 +54,7 @@ export default Ember.Route.extend({
           var delta = moment().utc() - game.get('lastTurnSwitch')
           //Ember.Logger.info('Game tick, last switch: ' + (delta / 1000) + 's ago');
 
-          Ember.Logger.info('** Setting opponent:', opponent);
+          //Ember.Logger.info('** Setting opponent:', opponent);
           gameCtrl.set('opponent', opponent)
 
 
@@ -102,7 +103,11 @@ export default Ember.Route.extend({
             gameCtrl.set(p, game.get(p))
           })
 
-          return game.save();
+          if (game.get('turn') === username) {
+            return  game.save();
+          } else {
+            return Ember.RSVP.resolve();
+          }
         });
         promises.push(p);
       }
@@ -168,6 +173,7 @@ export default Ember.Route.extend({
       if (id) {
 
         this.store.find('game', id).then((game) => {
+          Ember.Logger.info('Found Game', game);
 
           if (username === id) {
             var curHp = game.get('opponentBase');
