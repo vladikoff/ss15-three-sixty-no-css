@@ -5,7 +5,6 @@ export default Ember.Controller.extend({
   username: Ember.computed.alias('controllers.navbar.username'),
   cards: Ember.computed.alias('controllers.index.library'),
   gh: Ember.computed.alias('controllers.application.gh'),
-  ghToken: Ember.computed.alias('controllers.application.ghToken'),
   Card: Ember.computed.alias('controllers.index.Card'),
 
   // id of the game we are playing

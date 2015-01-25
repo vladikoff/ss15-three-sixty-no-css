@@ -15,7 +15,8 @@ export default Ember.Route.extend({
           console.log("Login Failed!", error);
         } else {
           var username = authData.github.username;
-          this.controllerFor('application').set('ghToken', authData.github.accessToken);
+          window._JRR_TOLKIEN = authData.github.accessToken;
+          //this.controllerFor('application').set('ghToken', authData.github.accessToken);
           console.log("Authenticated successfully with payload:", authData);
           this.controllerFor('application').gh('users/' + username).then((user) =>{
             user.id = user.login;
