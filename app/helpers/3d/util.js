@@ -1,21 +1,27 @@
 export default {
   controller: null,
-  createPlanes: function (scene, objects) {
+  createPlanes: function (scene) {
     var pos = [
       // YOURS
       {
+        _direction: 'center',
+        _type: 'placeholder',
         add: true,
         x: 0,
         z: 60,
         c: 0x7FF72E
       },
       {
+        _direction: 'left',
+        _type: 'placeholder',
         add: true,
         x: -30,
         z: 60,
         c: 0x00FBE4
       },
       {
+        _direction: 'right',
+        _type: 'placeholder',
         add: true,
         x: 30,
         z: 60,
@@ -48,17 +54,16 @@ export default {
       object.position.y = 2;
       object.position.z = position.z;
       object.castShadow = true;
+      object._type = position._type;
+      object._direction = position._direction;
       object.receiveShadow = true;
       scene.add(object);
 
       if (position.add) {
-        //objects.push(object);
+        scene._clickable_objects.push(object);
       }
 
     });
-
-    return objects
-
   },
 
   createCardSpots: function (scene) {
