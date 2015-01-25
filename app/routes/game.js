@@ -106,13 +106,12 @@ export default Ember.Route.extend({
 
     // Call to set a specific board position
     setBoard: function(pos, card) {
-      Ember.Logger.info('Setting card: ', pos, card)
+      Ember.Logger.info('Save card to ctrl/db: ', pos, card)
       var gameCtrl = this.controllerFor('game')
       var id = gameCtrl.get('id')
       gameCtrl.set(pos, card)
       if (id) {
         this.store.find('game', id).then((game) => {
-          Ember.Logger.info('Saving in db...')
           game.set(pos, card)
           return game.save()
         })
