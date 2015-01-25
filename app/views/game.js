@@ -36,21 +36,19 @@ export default Ember.View.extend({
   }),
   onBoardChange: function(controller, key) {
     if (!this.get('scene')) return
-    // var isOpponent = this.get('controller.isOpponent')
-    // if (isOpponent) {
-    //   if (key.indexOf('Creator') != -1) {
-    //     key = key.replace('Creator', 'Opponent')
-    //   } else if (key.indexOf('Opponent') != -1) {
-    //     key = key.replace('Opponent', 'Creator')
-    //   }
-    // }
+    var isOpponent = this.get('controller.isOpponent')
+    key = key.replace('board', '')
+
+    var owner = key.indexOf('Creator') !== -1 ? 'Creator' : 'Opponent'
+    if (isOpponent) {
+      if (key.indexOf('Creator') !== -1) {
+        owner = 'Opponent'
+      } else if (key.indexOf('Opponent') !== -1) {
+        owner = 'Creator'
+      }
+    }
 
     var cardId = this.get('controller.' + key)
-    var position = key.replace('board', '')
-    var owner = 'Creator'
-    if (key.indexOf('Opponent') != -1) {
-      owner = 'Opponent'
-    }
     position = position.replace(owner, '')
     this.get('controller').lookupCard(cardId).then((card) => {
       Ember.Logger.info('Creating mesh for card', position, owner, card.get('id'));
