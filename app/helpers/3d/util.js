@@ -151,6 +151,9 @@ export default {
   addCard: function (position, owner, card) {
     var scene = window.SCENE;
     if (scene) {
+
+      if (!card.get) throw new Error('You tried setting a card without an id')
+
       Ember.Logger.info('Adding Card', card);
       var data = card.get('id')
 
