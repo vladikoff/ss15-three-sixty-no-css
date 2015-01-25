@@ -31,7 +31,7 @@ export default {
       {
         x: -30,
         z: -60,
-        c: 0x8E2800
+        c: 0x1B63F7
       },
       {
         x: 30,
@@ -52,7 +52,7 @@ export default {
       scene.add(object);
 
       if (position.add) {
-        objects.push(object);
+        //objects.push(object);
       }
 
     });
@@ -154,7 +154,29 @@ export default {
       object.position.y = 10;
       object.position.z = destination.z;
       object.name = 'board' + owner + position;
+
+
+      //var src = this.get('controller.opponentAvatarUrl')
+      //if (!src) return
+
+      var image = new Image();
+      image.crossOrigin = "Anonymous";
+      image.addEventListener('load', () => {
+        console.log('loaded img');
+        var texture = new THREE.Texture(image);
+        texture.needsUpdate = true;
+        var geometry = new THREE.BoxGeometry(5, 5, 0.9);
+        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+        mesh.rotation.y = Math.PI;
+        mesh.position.y = -5;
+        object.add(mesh);
+      }, false);
+      image.src = 'https://avatars2.githubusercontent.com/u/1630826?v=3&s=200';
+
+
+
       scene.add(object);
+      scene._clickable_objects.push(object);
 
 
     }

@@ -61,7 +61,6 @@ export default Ember.View.extend({
 
     var container, stats, plane;
     var camera, controls, scene, projector, renderer;
-    var objects = [], plane;
     var mouse = new THREE.Vector2(), offset = new THREE.Vector3(), INTERSECTED, SELECTED;
     init();
     animate();
@@ -82,6 +81,8 @@ export default Ember.View.extend({
       controls.dynamicDampingFactor = 0.3;*/
       scene = new THREE.Scene();
       scene.add(new THREE.AmbientLight(0x505050));
+      scene._clickable_objects = [];
+
       window.SCENE = scene;
       var light = new THREE.SpotLight(0xffffff, 1.5);
       light.position.set(0, 500, 2000);
@@ -119,7 +120,7 @@ export default Ember.View.extend({
         object.castShadow = true;
         object.receiveShadow = true;
         scene.add(object);
-        objects.push(object);
+        scene._clickable_objects.push(object);
 
       }
       // var controller = self.get('controller');
@@ -128,7 +129,7 @@ export default Ember.View.extend({
       // var app = controller.controllerFor('application');
 
       //util.controller = self.get('controller')
-      util.createPlanes(scene, objects);
+      util.createPlanes(scene);
       util.createCardSpots(scene);
 
       util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
@@ -195,7 +196,7 @@ export default Ember.View.extend({
        // SELECTED.position.copy(intersects[0].point.sub(offset));
         return;
       }
-      var intersects = raycaster.intersectObjects(objects);
+      var intersects = raycaster.intersectObjects(scene._clickable_objects);
       if (intersects.length > 0) {
         if (INTERSECTED != intersects[0].object) {
           if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
@@ -217,7 +218,7 @@ export default Ember.View.extend({
       var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
       projector.unprojectVector(vector, camera);
       var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-      var intersects = raycaster.intersectObjects(objects);
+      var intersects = raycaster.intersectObjects(scene._clickable_objects);
       if (intersects.length > 0) {
         //controls.enabled = false;
         SELECTED = intersects[0].object;
