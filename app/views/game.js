@@ -222,11 +222,16 @@ export default Ember.View.extend({
         //controls.enabled = false;
 
         // TODO: Check if a card, not a grid space was clicked
-
-        var direction = intersects[0].object._direction;
-        direction = direction.slice(0, 1).toUpperCase() + '1'
-        var owner = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
-        self.get('controller').send('setBoard', 'board' + owner + direction, 'neoziro/grunt-shipit' + Math.random())
+        if (intersects[0].object.hasOwnProperty('_direction')) {
+          // A grid space clicked
+          var direction = intersects[0].object._direction;
+          direction = direction.slice(0, 1).toUpperCase() + '1'
+          var owner = self.get('controller.isOpponent') ? 'Opponent' : 'Creator'
+          self.get('controller').send('setBoard', 'board' + owner + direction)
+        } else {
+          // A card was clicked
+          var spot = intersects[0].object.name;
+        }
 
         container.style.cursor = 'move';
       }

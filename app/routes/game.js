@@ -104,13 +104,19 @@ export default Ember.Route.extend({
       })
     },
 
+    // When a card is selected
+    selectCard: function(card) {
+      this.controllerFor('game').set('lastSelectedCard', card.get('name'))
+    },
+
     // Call to set a specific board position
-    setBoard: function(pos, card) {
+    setBoard: function(pos) {
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
+      var card = gameCtrl.get('lastSelectedCard')
 
-      // Not your turn
-      if (gameCtrl.get('turn') !== username) return
+      // Not your turn or no selected card
+      if (gameCtrl.get('turn') !== username || !card) return
 
       var id = gameCtrl.get('id')
       if (id) {

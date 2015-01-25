@@ -7,6 +7,9 @@ export default Ember.Controller.extend({
   // id of the game we are playing
   id: null,
 
+  // Last selected card
+  lastSelectedCard: null,
+
   // name of your opponent
   opponent: null,
   opponentAvatarUrl: null,
