@@ -45,18 +45,16 @@ export default Ember.View.extend({
       }
     }
 
-    var data = controller.get(key)
-    Ember.Logger.info('Creating mesh for card', key, data);
-    var destination = window.POSITIONS[key];
-    destination.data = data;
+    var data = this.get('controller.' + key)
+    var position = key.replace('board', '')
+    var owner = 'Creator'
+    if (key.indexOf('Opponent') != -1) {
+      owner = 'Opponent'
+    }
+    position = position.replace(owner, '')
 
-    var geometry = new THREE.BoxGeometry(5, 10, 0.1);
-    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF}));
-    object.position.x = destination.x;
-    object.position.y = 10;
-    object.position.z = destination.z;
-    object.name = key;
-    this.get('scene').add(object);
+    Ember.Logger.info('Creating mesh for card', position, owner, data);
+    util.addCard(position, owner, data)
   },
 
   init3d: function () {
