@@ -9,27 +9,35 @@
     {{/if}}
   </div>
 
-  <h1>Current Card Deck</h1>
-  <ul class="cards">
-    {{#each card in deck}}
-      <li>
-        {{small-card data=card action="deselect"}}
-      </li>
-    {{/each}}
-  </ul>
+  <div class="col-xs-6 col-sm-4">
+    <h2>Current Card Deck</h2>
 
-  <h2>Your Card Collection</h2>
-  <ul class="cards">
-    {{#each card in library}}
-      <li>
-      {{small-card data=card action="select"}}
-      </li>
-    {{/each}}
-  </ul>
+    <ul class="cards">
+      {{#each card in deck}}
+        <li>
+          {{small-card data=card}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 
-  <h2>Card preview</h2>
-  <div class="preview">
+  <div class="col-xs-6 col-sm-4">
+    <h2>Card preview</h2>
 
+    <div class="preview">
+    </div>
+  </div>
+
+  <div class="col-xs-6 col-sm-4">
+    <h2>Your Card Collection</h2>
+
+    <ul class="cards">
+      {{#each card in library}}
+        <li>
+        {{small-card data=card}}
+        </li>
+      {{/each}}
+    </ul>
   </div>
 
 {{else}}
