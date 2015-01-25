@@ -2,15 +2,15 @@
   list-style: none;
   float: left;
   position: relative;
-  width: 15%;
+  width: 30%;
   text-align: center;
   color: black;
   padding: 2px;
 }
 
 .inner {
-  border: 3px solid #333;
-  border-radius: .2em;
+  border: 4px solid #333;
+  border-radius: 1em;
   padding: 0;
   background-color: #ddd;
   font-size: .8em;
@@ -19,7 +19,7 @@
 .desc {
   border: 1px solid #333;
   padding: .6em .4em;
-  margin: .2em 0;
+  margin: .2em;
   background-color: #fff;
   border-radius: .5em;
   min-height: 100px;
@@ -29,10 +29,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: .1em;
+  margin: 1em;
   text-align: center;
   background: white;
-  margin-top: -27px;
   font-weight: bold;
   padding: 10px 2px;
   border: 2px solid grey;
@@ -47,8 +46,8 @@
   }
 }
 .stats {
-  text-align: right;
   div {
+    text-align: right;
     width: 40px;
     height: 40px;
     font-size: 20px;
@@ -56,24 +55,22 @@
     position: absolute;
   }
   .stats-atk {
-    background: red;
-    left: 10px;
-    bottom: 0;
+    color: red;
+    left: 0.5em;
+    bottom: 0.5em;
   }
   .stats-mana {
-    background: blue;
-    position: absolute;
-    left: 80px;
-    bottom: 0;
+    color: blue;
+    left: 42%;
+    bottom: 0.5em;
   }
   .stats-def {
-    background: yellow;
-    right: 0;
-    bottom: 0;
+    color: yellow;
+    right: 0.75em;
+    bottom: 0.5em;
   }
   span {
     display: block;
-
     font-size: 10px;
   }
 }
