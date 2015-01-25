@@ -29,7 +29,6 @@ export default Ember.Controller.extend({
 
   actions: {
     showCurrent: function(data) {
-      console.log("current", data);
       this.set('current', data);
     }
   },

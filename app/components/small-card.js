@@ -11,6 +11,5 @@ export default Ember.Component.extend({
   },
   mouseEnter: function(e) {
     this.sendAction('showCurrent', this.data);
-    console.log('here');
   }
 });

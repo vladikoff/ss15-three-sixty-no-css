@@ -2,6 +2,22 @@
   width: 100%;
   height: 44px;
   padding: 10px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+&.draggable {
+  padding-left: 40px;
+  position: relative;
+
+  &:before {
+    content: '\2630';
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    cursor: move;
+  }
 }
 
 .name {

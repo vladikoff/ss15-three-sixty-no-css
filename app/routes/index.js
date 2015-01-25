@@ -43,7 +43,7 @@ export default Ember.Route.extend({
         });
 
         // Get first 8 cards for a deck
-        var deck = library.slice(0, 8)
+        var deck = library.splice(0, 8)
         this.controllerFor('game').set('deck', deck);
       })
     },

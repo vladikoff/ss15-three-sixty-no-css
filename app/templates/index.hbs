@@ -12,13 +12,7 @@
   <div class="col-xs-6 col-sm-4">
     <h2>Current Card Deck</h2>
 
-    <ul class="cards">
-      {{#each card in deck}}
-        <li>
-          {{small-card showCurrent="showCurrent" data=card}}
-        </li>
-      {{/each}}
-    </ul>
+    {{deck-list showCurrent="showCurrent" data=deck}}
   </div>
 
   <div class="col-xs-6 col-sm-4">
@@ -36,13 +30,7 @@
   <div class="col-xs-6 col-sm-4">
     <h2>Your Card Collection</h2>
 
-    <ul class="cards">
-      {{#each card in library}}
-        <li>
-          {{small-card showCurrent="showCurrent" data=card}}
-        </li>
-      {{/each}}
-    </ul>
+    {{deck-list showCurrent="showCurrent" data=library}}
   </div>
 
 {{else}}

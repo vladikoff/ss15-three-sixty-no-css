@@ -16,6 +16,10 @@
   @import "components/small-card";
 }
 
+.ember-view.deck-list {
+  @import "components/deck-list";
+}
+
 * {
   box-sizing: Border-box;
 }
@@ -54,39 +58,12 @@ button {
   border-bottom: 2px solid white;
 }
 
-.cards {
-  list-style: none;
-  padding: 10px;
-  margin-left: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  background: #FFF;
-  border-radius: 5px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-
-  li:not(:last-child) {
-    border-bottom: 1px solid #F2F2F2;
-  }
-
-  &.cards-deck {
-    .card {
-      width: 135px
-    }
-  }
-}
-
 .find-game-well {
   margin-top: 20px;
 }
 
 #game-view {
   position: relative;
-  .cards {
-    margin-top: -50px;
-    z-index: 2;
-    position: relative;
-  }
   #render canvas {
   }
   .clock {

@@ -15,6 +15,7 @@ app.import('vendor/moment.js');
 app.import('vendor/tweenjs.js');
 app.import('vendor/soundtrack.js');
 app.import('vendor/helvetiker_regular.js');
+app.import('vendor/Sortable.js');
 
 // Use `app.import` to add additional libraries to the generated
 // output files.

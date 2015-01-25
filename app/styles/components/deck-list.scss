@@ -1,0 +1,19 @@
+& {
+  list-style: none;
+  padding: 10px;
+  margin-left: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  background: #FFF;
+  border-radius: 5px;
+
+  li:not(:last-child) {
+    border-bottom: 1px solid #F2F2F2;
+  }
+
+  .card {
+    width: 135px
+  }
+}
+
+
