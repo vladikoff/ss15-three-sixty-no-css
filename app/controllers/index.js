@@ -33,13 +33,20 @@ export default Ember.Controller.extend({
     },
 
     addToDeck: function(data) {
-      deck.pushObject(data);
-      library.removeObject(data);
+      this.get('deck').pushObject(data);
+      this.get('library').removeObject(data);
+
+      var deck = this.get('deck');
+
+      // Save the deck.
+      localStorage.deck = JSON.stringify(deck.toArray().map(function(i) {
+        return i.id;
+      }));
     },
 
     removeFromDeck: function(data) {
-      deck.removeObject(data);
-      library.pushObject(data);
+      this.get('deck').removeObject(data);
+      this.get('library').pushObject(data);
     }
   },
 
