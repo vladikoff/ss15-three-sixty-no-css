@@ -113,17 +113,17 @@ export default Ember.Route.extend({
     setBoard: function(pos) {
       var gameCtrl = this.controllerFor('game')
       var username = this.controllerFor('navbar').get('username')
-      var card = gameCtrl.get('lastSelectedCard.id')
+      var card = gameCtrl.get('lastSelectedCard')
 
       // Not your turn or no selected card
       if (gameCtrl.get('turn') !== username || !card) return
 
       var id = gameCtrl.get('id')
       if (id) {
-        Ember.Logger.info('Save card to ctrl/db: ', pos, card)
+        Ember.Logger.info('Save card to ctrl/db: ', pos, card.get('id'))
         this.store.find('game', id).then((game) => {
           gameCtrl.set(pos, card)
-          game.set(pos, card)
+          game.set(pos, card.get('id'))
           return game.save()
         })
       }
