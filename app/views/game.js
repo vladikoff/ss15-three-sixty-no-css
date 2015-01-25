@@ -1,7 +1,8 @@
 import Ember from 'ember';
 import util from '../helpers/3d/util';
+import GHMixin from '../mixins/gh';
 
-export default Ember.View.extend({
+export default Ember.View.extend(GHMixin, {
   // Example on how to know when the turn has changed here in the view
   onTurnChange: Ember.observer('controller.turn', function() {
     var myTurn = this.get('controller.turn')
