@@ -131,12 +131,15 @@ export default Ember.View.extend({
       // create the 6 planes that the game is played on
       util.createPlanes(scene);
       util.createCardSpots(scene);
-      util.createBase(scene);
+
+      // we create a base with the name of the opposite player. if i am opponent then i attack creator
+      var baseToAttackName = self.get('controller.isOpponent') ? 'creator' : 'opponent';
+      util.createBase(scene, baseToAttackName);
       var __DEBUG = location.search.indexOf('debug') > -1;
       if (__DEBUG) {
-        util.addCard('L2', 'Opponent', 'neoziro/grunt-shipit');
-        util.addCard('L1', 'Opponent', 'neoziro/grunt-shipit');
-        util.addCard('L1', 'Creator', 'Pencroff/WebStorm-Live-Template');
+        util.addCard('boardOpponentL2', 'neoziro/grunt-shipit');
+        util.addCard('boardOpponentL1', 'neoziro/grunt-shipit');
+        util.addCard('boardCreatorL1', 'neoziro/grunt-shipit');
       }
       //util.addCard('R1', 'Creator', 'Pencroff/WebStorm-Live-Template');
       //util.addCard('R2', 'Creator', 'Pencroff/WebStorm-Live-Template');
@@ -252,7 +255,7 @@ export default Ember.View.extend({
           if (spot.indexOf(myRole) > -1) {
             window.__SELECTED_CARD = spot;
             util.cardAttackSelectionMode(spot);
-            util.makeAllOppositeCardsAttackable();
+            util.makeAllOppositeCardsAttackable(self.get('controller.isOpponent') ? 'Creator' : 'Opponent');
           } else {
             Ember.Logger.info('// ELSE I clicked on a card on the other side');
             // ELSE I clicked on a card on the other side
@@ -269,7 +272,7 @@ export default Ember.View.extend({
               /// Animations
               util.attackCard(window.__SELECTED_CARD, spot);
 
-              util.cardSetHp(spot, 0);
+              util.cardSetHp(spot, 0, self.get('controller.isOpponent') ? 'creator' : 'opponent');
 
               util.stopAttackSelectionMode();
               util.stopAllOppositeCardsAttackable();

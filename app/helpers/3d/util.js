@@ -74,7 +74,7 @@ export default {
   /**
    * Create a base that can be attacked to win the game.
    */
-  createBase: function(scene) {
+  createBase: function(scene, role) {
     var geometry = new THREE.SphereGeometry( 15, 32, 32 );
     var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xFFFFFF, transparent: true}));
     object.material.ambient = object.material.color;
@@ -231,13 +231,10 @@ export default {
   attackCard: function (source, destination) {
     Ember.Logger.info('Attacking', source, destination);
     var scene = window.SCENE;
-
-    var origSource = window.POSITIONS[source];
-
     var sourceObject = scene.getObjectByName(source);
     var destinationObject = scene.getObjectByName(destination);
-
-    var cameraOrigPos = window.CAMERA.position;
+    var startedX = sourceObject.position.x;
+    var startedZ = sourceObject.position.z;
 
     var tween = new TWEEN.Tween(sourceObject.position)
       .to({x: destinationObject.position.x, z: destinationObject.position.z }, 500)
@@ -246,7 +243,7 @@ export default {
       });
 
     var tweenBack = new TWEEN.Tween(sourceObject.position)
-      .to({x: origSource.x, z: origSource.z }, 1000);
+      .to({x: startedX, z: startedZ }, 1000);
 
     tween.chain(tweenBack);
     tween.start();
@@ -294,7 +291,7 @@ export default {
     if (lastSelected) lastSelected.stop();
     window.__SELECTED_CARD = null;
   },
-  makeAllOppositeCardsAttackable: function () {
+  makeAllOppositeCardsAttackable: function (weAreAttackingRole) {
     if (window.__ATTACK_TWEENS) {
       window.__ATTACK_TWEENS.forEach(function (tween) {
         tween.stop();
@@ -307,13 +304,14 @@ export default {
     var scene = window.SCENE;
     // TODO: Get a better list
     var oppositeObjs = [
-      'boardOpponentL1',
-      'boardOpponentL2',
-      'boardOpponentC1',
-      'boardOpponentC2',
-      'boardOpponentR1',
-      'boardOpponentR2'
+      'board' + weAreAttackingRole + 'L1',
+      'board' + weAreAttackingRole + 'L2',
+      'board' + weAreAttackingRole + 'C1',
+      'board' + weAreAttackingRole + 'C2',
+      'board' + weAreAttackingRole + 'R1',
+      'board' + weAreAttackingRole + 'R2'
     ];
+    var baseName = weAreAttackingRole.toLowerCase() + 'Base';
 
     // TODO: IF THERE ARE NO OBJECTS PROTECTING THE BASE IN THIS LINE, then BASE CAN BE ATTACKED.
     var foundObjs = false;
@@ -330,7 +328,7 @@ export default {
 
     // no cards present, then base is attackable
     if (!foundObjs) {
-      var sourceObject = scene.getObjectByName('opponentBase');
+      var sourceObject = scene.getObjectByName(baseName);
       var resultTween = tweenOpacity(sourceObject);
       window.__ATTACK_TWEENS.push(resultTween);
     }
@@ -363,7 +361,9 @@ export default {
    * Decrease HP of a thing in game.
    * @param spot
    */
-  cardSetHp: function (spot, hp) {
+  cardSetHp: function (spot, hp, role) {
+    var baseName = role + 'Base';
+
     var newText = hp || '0';
     var scene = window.SCENE;
     var sourceObject = scene.getObjectByName(spot);
@@ -373,7 +373,7 @@ export default {
       sourceObject.remove(hp);
 
       var hpTxt = null;
-      if (spot === 'opponentBase') {
+      if (spot === baseName) {
         hpTxt = text.createBaseText(newText + ' HP');
       } else {
         hpTxt = text.createHpText(newText + ' HP');
