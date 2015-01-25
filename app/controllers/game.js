@@ -29,7 +29,9 @@ export default Ember.Controller.extend({
   opponentAvatarUrl: null,
 
   // Whether this player is the opponent or not
-  isOpponent: false,
+  isOpponent: Ember.computed('opponent', 'username', function() {
+    return !!(this.get('opponent') === this.get('username'))
+  }),
 
   // Did the opponent probably leave?
   opponentProbablyLeft: false,
