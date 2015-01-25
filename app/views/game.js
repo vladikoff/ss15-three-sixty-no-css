@@ -33,24 +33,24 @@ export default Ember.View.extend({
     this.get('controller.boardKeys').forEach((key) => {
       Ember.addObserver(this.get('controller'), key, this, this.onBoardChange)
     })
+
+    this.get('controller.hpKeys').forEach((key) => {
+      Ember.addObserver(this.get('controller'), key, this, this.onHpChange)
+    })
+
   }),
+  onHpChange: function (controller, key) {
+    var cardThatWasAttacked = key;
+    Ember.Logger.info('Received Attack:', cardThatWasAttacked);
+    //util.attackCard(window.__SELECTED_CARD, spot);
+    util.cardSetHp(cardThatWasAttacked, 0, self.get('controller.isOpponent') ? 'creator' : 'opponent');
+  },
+
   onBoardChange: function(controller, key) {
     var cardId = this.get('controller.' + key)
     Ember.Logger.info('Key Changed:', key, 'Card ID', cardId);
 
     if (!this.get('scene')) return
-
-    /*var isOpponent = this.get('controller.isOpponent')
-    key = key.replace('board', '')
-
-    var owner = key.indexOf('Creator') !== -1 ? 'Creator' : 'Opponent'
-    if (isOpponent) {
-      if (key.indexOf('Creator') !== -1) {
-        owner = 'Opponent'
-      } else if (key.indexOf('Opponent') !== -1) {
-        owner = 'Creator'
-      }
-    }*/
 
     var myRole = this.get('controller.isOpponent') ? 'Opponent' : 'Creator'
 
@@ -271,8 +271,12 @@ export default Ember.View.extend({
 
               /// Animations
               util.attackCard(window.__SELECTED_CARD, spot);
+              var spotHpData = spot.slice(5);
+              var currentHp = self.get('controller.' + spotHpData);
+              currentHp--;
+              self.set('controller.' + spotHpData, currentHp);
 
-              util.cardSetHp(spot, 0, self.get('controller.isOpponent') ? 'creator' : 'opponent');
+              util.cardSetHp(spot, currentHp, self.get('controller.isOpponent') ? 'creator' : 'opponent');
 
               util.stopAttackSelectionMode();
               util.stopAllOppositeCardsAttackable();

@@ -62,5 +62,20 @@ export default Ember.Controller.extend({
     'boardOpponentC2',
     'boardOpponentR1',
     'boardOpponentR2',
+  ],
+
+  hpKeys: [
+    'hpCreatorL1',
+    'hpCreatorL2',
+    'hpCreatorC1',
+    'hpCreatorC2',
+    'hpCreatorR1',
+    'hpCreatorR2',
+    'hpOpponentL1',
+    'hpOpponentL2',
+    'hpOpponentC1',
+    'hpOpponentC2',
+    'hpOpponentR1',
+    'hpOpponentR2',
   ]
 });
